@@ -125,7 +125,7 @@ class PdfRasterizer private constructor(
     private suspend fun <T> locked(block: () -> T): T = try {
         withContext(Dispatchers.IO) {
             mutex.withLock {
-                check(!closed) { "This document has been closed." }
+                check(!closed) { "Dokument został zamknięty." }
                 block()
             }
         }

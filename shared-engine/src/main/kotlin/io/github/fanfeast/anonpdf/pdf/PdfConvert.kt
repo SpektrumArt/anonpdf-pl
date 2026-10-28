@@ -244,11 +244,11 @@ object PdfConvert {
         options: ImagesToPdfOptions,
         onProgress: Progress = {},
     ) = withContext(Dispatchers.IO) {
-        require(images.isNotEmpty()) { "Pick at least one image." }
+        require(images.isNotEmpty()) { "Wybierz co najmniej jeden obraz." }
         PDDocument().use { doc ->
             images.forEachIndexed { index, source ->
                 val bitmap = decode(source)
-                    ?: error("Could not read image ${index + 1}.")
+                    ?: error("Nie udało się odczytać obrazu ${index + 1}.")
                 val flattened = bitmap.flattenedOntoWhite()
 
                 val pageBox = PdfOps.presetRectangle(

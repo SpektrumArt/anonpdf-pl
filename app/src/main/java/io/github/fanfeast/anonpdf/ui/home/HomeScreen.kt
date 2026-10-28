@@ -81,10 +81,10 @@ fun HomeScreen(
         topBar = {
             AnonTopBar(title = "AnonPDF") {
                 IconButton(onClick = onOpenSettings) {
-                    Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                    Icon(Icons.Filled.Settings, contentDescription = "Ustawienia")
                 }
                 IconButton(onClick = onOpenAbout) {
-                    Icon(Icons.Filled.Info, contentDescription = "About")
+                    Icon(Icons.Filled.Info, contentDescription = "O aplikacji")
                 }
             }
         },
@@ -106,7 +106,7 @@ fun HomeScreen(
                 ) {
                     Icon(Icons.Filled.FolderOpen, contentDescription = null)
                     Spacer(Modifier.width(10.dp))
-                    Text("Open a PDF", style = MaterialTheme.typography.titleMedium)
+                    Text("Otwórz PDF", style = MaterialTheme.typography.titleMedium)
                 }
                 Spacer(Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -122,7 +122,7 @@ fun HomeScreen(
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text("My files")
+                        Text("Moje pliki")
                     }
                     OutlinedButton(
                         onClick = onEditDocument,
@@ -136,7 +136,7 @@ fun HomeScreen(
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text("Edit pages")
+                        Text("Edytuj strony")
                     }
                 }
             }
@@ -148,10 +148,10 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        SectionLabel("Recent", Modifier.weight(1f))
+                        SectionLabel("Ostatnie pliki", Modifier.weight(1f))
                         TextButton(
                             onClick = { scope.launch { preferences.clearRecents() } },
-                        ) { Text("Clear") }
+                        ) { Text("Wyczyść") }
                     }
                 }
                 items(recents.size) { index ->
@@ -183,8 +183,8 @@ fun HomeScreen(
             item {
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "No ads, no analytics, no account, no network permission. " +
-                        "Open source.",
+                    "Bez reklam, analityki, konta i uprawnienia do internetu. " +
+                        "Otwarty kod źródłowy.",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -211,13 +211,13 @@ private fun PrivacyBanner() {
             Spacer(Modifier.width(14.dp))
             Column {
                 Text(
-                    "Nothing leaves this phone",
+                    "Dokumenty pozostają na telefonie",
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    "AnonPDF has no network permission at all, so Android will not " +
-                        "let it upload your documents even if something tried. " +
-                        "No account, no ads, no tracking.",
+                    "AnonPDF nie ma uprawnienia do internetu, więc Android nie pozwoli " +
+                        "na wysłanie Twoich dokumentów. " +
+                        "Bez konta, reklam i śledzenia.",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
@@ -240,11 +240,11 @@ private fun EditorPromo(onClick: () -> Unit) {
             Icon(Icons.Filled.Edit, contentDescription = null, modifier = Modifier.size(24.dp))
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text("Edit a PDF", style = MaterialTheme.typography.titleMedium)
+                Text("Edytuj PDF", style = MaterialTheme.typography.titleMedium)
                 Text(
-                    "Every tool in one place: rotate, crop, resize, delete and reorder " +
-                        "pages, add text, white-out, highlights or drawings — several at " +
-                        "once, with a live preview of the real result before you save.",
+                    "Wszystkie narzędzia w jednym miejscu: obracanie, przycinanie, skalowanie, usuwanie i zmiana kolejności " +
+                        "stron, dodawanie tekstu, zakrywanie, podświetlanie i rysowanie. Wprowadzaj wiele zmian " +
+                        "z podglądem wyniku przed zapisaniem.",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

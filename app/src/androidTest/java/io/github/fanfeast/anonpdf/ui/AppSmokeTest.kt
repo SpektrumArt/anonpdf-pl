@@ -85,54 +85,54 @@ class AppSmokeTest {
 
     private fun launchHome() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
-        compose.onNodeWithText("Open a PDF").assertIsDisplayed()
+        compose.onNodeWithText("Otwórz PDF").assertIsDisplayed()
     }
 
     @Test
     fun launchesToHome() {
         launchHome()
-        compose.onNodeWithText("My files").assertIsDisplayed()
-        compose.onNodeWithText("Edit pages").assertIsDisplayed()
+        compose.onNodeWithText("Moje pliki").assertIsDisplayed()
+        compose.onNodeWithText("Edytuj strony").assertIsDisplayed()
     }
 
     @Test
     fun settingsOpensAndReturns() {
         launchHome()
-        compose.onNodeWithContentDescription("Settings").performClick()
-        compose.onNodeWithText("Clear recent files").assertExists()
-        compose.onNodeWithContentDescription("Back").performClick()
-        compose.onNodeWithText("Open a PDF").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Ustawienia").performClick()
+        compose.onNodeWithText("Wyczyść ostatnie pliki").assertExists()
+        compose.onNodeWithContentDescription("Wstecz").performClick()
+        compose.onNodeWithText("Otwórz PDF").assertIsDisplayed()
     }
 
     @Test
     fun aboutOpensAndReturns() {
         launchHome()
-        compose.onNodeWithContentDescription("About").performClick()
-        compose.onNodeWithText("About").assertIsDisplayed()
-        compose.onNodeWithContentDescription("Back").performClick()
-        compose.onNodeWithText("Open a PDF").assertIsDisplayed()
+        compose.onNodeWithContentDescription("O aplikacji").performClick()
+        compose.onNodeWithText("O aplikacji").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Wstecz").performClick()
+        compose.onNodeWithText("Otwórz PDF").assertIsDisplayed()
     }
 
     @Test
     fun browseOpens() {
         launchHome()
-        compose.onNodeWithText("My files").performClick()
-        compose.onNodeWithText("Browse").assertIsDisplayed()
+        compose.onNodeWithText("Moje pliki").performClick()
+        compose.onNodeWithText("Przeglądaj").assertIsDisplayed()
     }
 
     @Test
     fun editorWithoutDocumentAsksForOne() {
         launchHome()
-        compose.onNodeWithText("Edit pages").performClick()
-        compose.onNodeWithText("Choose a PDF").assertIsDisplayed()
+        compose.onNodeWithText("Edytuj strony").performClick()
+        compose.onNodeWithText("Wybierz PDF").assertIsDisplayed()
     }
 
     @Test
     fun editorPromoOpensEditor() {
         launchHome()
-        scrollHomeTo("Edit a PDF")
-        compose.onNodeWithText("Edit a PDF").performClick()
-        compose.onNodeWithText("Choose a PDF").assertIsDisplayed()
+        scrollHomeTo("Edytuj PDF")
+        compose.onNodeWithText("Edytuj PDF").performClick()
+        compose.onNodeWithText("Wybierz PDF").assertIsDisplayed()
     }
 
     /**
@@ -146,11 +146,11 @@ class AppSmokeTest {
             scrollHomeTo(spec.title)
             compose.onNodeWithText(spec.title).performClick()
             // Home has no Back button, so seeing one proves we left it.
-            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Wstecz").assertIsDisplayed()
             compose.onAllNodesWithText(spec.title).onFirst().assertIsDisplayed()
-            compose.onNodeWithContentDescription("Back").performClick()
-            scrollHomeTo("Open a PDF")
-            compose.onNodeWithText("Open a PDF").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Wstecz").performClick()
+            scrollHomeTo("Otwórz PDF")
+            compose.onNodeWithText("Otwórz PDF").assertIsDisplayed()
         }
     }
 
@@ -183,18 +183,18 @@ class AppSmokeTest {
         compose.waitFor { onAllNodesWithText("1 / 3") }
         compose.waitFor { onAllNodesWithContentDescription("Page 1") }
 
-        compose.onNodeWithContentDescription("Edit").performClick()
-        compose.waitFor { onAllNodesWithContentDescription("Undo") }
+        compose.onNodeWithContentDescription("Edytuj").performClick()
+        compose.waitFor { onAllNodesWithContentDescription("Cofnij") }
     }
 
     @Test
     fun editsSurviveAToolAndBack() {
         openAnEditedDocumentInATool()
 
-        compose.onNodeWithContentDescription("Back").performClick()
-        compose.waitFor { onAllNodesWithContentDescription("Undo") }
+        compose.onNodeWithContentDescription("Wstecz").performClick()
+        compose.waitFor { onAllNodesWithContentDescription("Cofnij") }
         // Back in the editor, the rotation is still pending and can be undone.
-        compose.onNodeWithContentDescription("Undo").assertIsEnabled()
+        compose.onNodeWithContentDescription("Cofnij").assertIsEnabled()
     }
 
     /** Opens a PDF in the editor, rotates a page, and hands it to Compress. */
@@ -207,17 +207,17 @@ class AppSmokeTest {
         scenario = ActivityScenario.launch(intent)
 
         compose.waitFor { onAllNodesWithText("1 / 3") }
-        compose.onNodeWithContentDescription("Edit").performClick()
-        compose.waitFor { onAllNodesWithContentDescription("Undo") }
-        compose.onNodeWithText("Right").performClick()
-        compose.onNodeWithContentDescription("Undo").assertIsEnabled()
+        compose.onNodeWithContentDescription("Edytuj").performClick()
+        compose.waitFor { onAllNodesWithContentDescription("Cofnij") }
+        compose.onNodeWithText("W prawo").performClick()
+        compose.onNodeWithContentDescription("Cofnij").assertIsEnabled()
 
         // Hand the edited document to a one-shot tool. Its tile is on a later
         // page of the tool drawer, so swipe the drawer until the tile exists.
-        val compressTile = hasText("Compress") and hasClickAction()
+        val compressTile = hasText("Kompresuj") and hasClickAction()
         repeat(TOOL_PAGES_TO_SWIPE) {
             if (compose.onAllNodes(compressTile).fetchSemanticsNodes().isEmpty()) {
-                compose.onAllNodes(hasText("Crop") or hasText("Split") or hasText("Watermark"))
+                compose.onAllNodes(hasText("Przytnij") or hasText("Podziel") or hasText("Znak wodny"))
                     .onFirst()
                     .performTouchInput { swipeLeft() }
                 compose.waitForIdle()
@@ -226,7 +226,7 @@ class AppSmokeTest {
         compose.onAllNodes(compressTile).onFirst()
             .performSemanticsAction(SemanticsActions.OnClick)
         compose.waitUntil(TIMEOUT_MS) {
-            compose.onAllNodesWithContentDescription("Undo").fetchSemanticsNodes().isEmpty()
+            compose.onAllNodesWithContentDescription("Cofnij").fetchSemanticsNodes().isEmpty()
         }
     }
 
@@ -239,9 +239,9 @@ class AppSmokeTest {
             .setDataAndType(Uri.fromFile(pdf), "application/pdf")
         scenario = ActivityScenario.launch(intent)
 
-        compose.waitFor { onAllNodesWithText("Unlock") }
-        compose.onNodeWithText("Password").performTextInput("secret")
-        compose.onNodeWithText("Unlock").performClick()
+        compose.waitFor { onAllNodesWithText("Odblokuj") }
+        compose.onNodeWithText("Hasło").performTextInput("secret")
+        compose.onNodeWithText("Odblokuj").performClick()
         compose.waitFor { onAllNodesWithText("1 / 2") }
 
         // While it is open, the renderer reads an unlocked copy in the cache.

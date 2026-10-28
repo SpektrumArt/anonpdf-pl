@@ -26,33 +26,33 @@ data class InputDoc(
 
 enum class CompressMode(val label: String, val explanation: String) {
     SMART(
-        "Keep text",
-        "Re-encodes the pictures inside the PDF and leaves text and vector " +
-            "artwork alone. The document stays selectable and searchable.",
+        "Zachowaj tekst",
+        "Ponownie koduje obrazy w PDF, zachowując tekst i grafikę " +
+            "wektorową. Tekst nadal można zaznaczać i przeszukiwać.",
     ),
     RASTERIZE(
-        "Smallest file",
-        "Redraws every page as a flat image. This gives the biggest saving, but " +
-            "text stops being selectable or searchable afterwards.",
+        "Najmniejszy plik",
+        "Zapisuje każdą stronę jako obraz. Najbardziej zmniejsza plik, ale " +
+            "uniemożliwia zaznaczanie i wyszukiwanie tekstu.",
     ),
 }
 
 enum class CompressStrength(val label: String, val quality: Float, val maxEdge: Int, val dpi: Int) {
-    LIGHT("Light", 0.85f, 2400, 200),
-    BALANCED("Balanced", 0.70f, 1600, 150),
-    STRONG("Strong", 0.50f, 1100, 110),
+    LIGHT("Lekka", 0.85f, 2400, 200),
+    BALANCED("Zrównoważona", 0.70f, 1600, 150),
+    STRONG("Silna", 0.50f, 1100, 110),
 }
 
 enum class SplitMode(val label: String) {
-    RANGES("By page ranges"),
-    EVERY("Every N pages"),
+    RANGES("Według zakresów stron"),
+    EVERY("Co N stron"),
 }
 
 enum class CropPreset(val label: String, val inset: Float) {
-    NONE("None", 0f),
-    SLIM("Slim", 0.03f),
-    MEDIUM("Medium", 0.06f),
-    WIDE("Wide", 0.10f),
+    NONE("Brak", 0f),
+    SLIM("Wąski", 0.03f),
+    MEDIUM("Średni", 0.06f),
+    WIDE("Szeroki", 0.10f),
 }
 
 /**

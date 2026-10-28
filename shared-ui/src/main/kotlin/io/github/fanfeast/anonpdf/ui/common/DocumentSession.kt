@@ -97,12 +97,12 @@ suspend fun openDocumentSession(
         )
     }
 } catch (t: PdfWrongPasswordException) {
-    OpenOutcome.WrongPassword("That password did not work.")
+    OpenOutcome.WrongPassword("Nieprawidłowe hasło.")
 } catch (e: CancellationException) {
     throw e
 } catch (t: Throwable) {
     OpenOutcome.Failed(
         t.message?.takeIf { it.isNotBlank() && it.length < 240 }
-            ?: "This file could not be opened as a PDF.",
+            ?: "Nie udało się otworzyć tego pliku jako PDF.",
     )
 }

@@ -68,9 +68,9 @@ class EditorZoomTest {
     @After fun closePreview() { scenario.close() }
 
     @Test fun zoomAndPanKeepInkInPageCoordinates() {
-        val originalPage = compose.onNodeWithContentDescription("Page preview").fetchSemanticsNode().boundsInRoot
+        val originalPage = compose.onNodeWithContentDescription("Podgląd strony").fetchSemanticsNode().boundsInRoot
         val originalRenderWidth = renderWidth
-        repeat(2) { compose.onNodeWithContentDescription("Zoom in").performClick() }
+        repeat(2) { compose.onNodeWithContentDescription("Powiększ").performClick() }
         compose.onNodeWithText("200%").assertExists()
         // The whole-page preview stays the same size; only the window on screen
         // is redrawn, at the zoomed-in resolution.
@@ -84,7 +84,7 @@ class EditorZoomTest {
             assertTrue(left >= 0 && top >= 0 && left + width <= fullWidth)
             assertTrue(width <= viewportBounds.width + 1 && height <= viewportBounds.height + 1)
         }
-        compose.onNodeWithText("Move page").performClick()
+        compose.onNodeWithText("Przesuń stronę").performClick()
         val viewport = compose.onNodeWithTag("Editor viewport")
         viewport.performTouchInput {
             down(center)
@@ -92,7 +92,7 @@ class EditorZoomTest {
             up()
         }
         compose.runOnIdle { assertTrue((mode.value as EditorMode.Inking).strokes.isEmpty()) }
-        compose.onNodeWithText("Resume editing").performClick()
+        compose.onNodeWithText("Wznów edycję").performClick()
         viewport.performTouchInput { swipe(center, center + Offset(40f, 30f), 500) }
         compose.runOnIdle {
             val stroke = (mode.value as EditorMode.Inking).strokes.single()
@@ -108,7 +108,7 @@ class EditorZoomTest {
     }
 
     @Test fun pinchDoesNotDrawAndNewPageResetsView() {
-        compose.onNodeWithText("Move page").performClick()
+        compose.onNodeWithText("Przesuń stronę").performClick()
         compose.onNodeWithTag("Editor viewport").performTouchInput {
             down(0, center - Offset(30f, 0f))
             down(1, center + Offset(30f, 0f))
@@ -126,6 +126,6 @@ class EditorZoomTest {
             page.value = 1
         }
         compose.onNodeWithText("100%").assertExists()
-        compose.onNodeWithText("Move page").assertExists()
+        compose.onNodeWithText("Przesuń stronę").assertExists()
     }
 }

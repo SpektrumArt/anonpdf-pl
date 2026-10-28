@@ -121,9 +121,9 @@ enum class PaperSize(
 
 enum class PageOrientation(val label: String) {
     /** Keep whichever way round the page already is. */
-    AUTO("Match page"),
-    PORTRAIT("Portrait"),
-    LANDSCAPE("Landscape"),
+    AUTO("Zgodnie ze stroną"),
+    PORTRAIT("Pionowa"),
+    LANDSCAPE("Pozioma"),
 }
 
 /**
@@ -167,9 +167,9 @@ data class CompressResult(
 }
 
 /** Thrown when a document needs a password we do not have. */
-class PdfPasswordRequiredException(message: String = "This PDF is password protected.") :
+class PdfPasswordRequiredException(message: String = "Ten PDF jest chroniony hasłem.") :
     Exception(message)
 
 /** Thrown when the supplied password does not open the document. */
-class PdfWrongPasswordException(message: String = "That password did not work.") :
+class PdfWrongPasswordException(message: String = "Nieprawidłowe hasło.") :
     Exception(message)

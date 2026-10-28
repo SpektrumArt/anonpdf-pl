@@ -29,7 +29,7 @@ class PageRangesTest {
         val error = assertThrows(IllegalArgumentException::class.java) {
             PageRanges.parse("1-11", 10)
         }
-        assertEquals("This document only has 10 pages.", error.message)
+        assertEquals("Liczba stron w tym dokumencie: 10.", error.message)
     }
 
     @Test
@@ -37,7 +37,7 @@ class PageRangesTest {
         val error = assertThrows(IllegalArgumentException::class.java) {
             PageRanges.parse("8-4", 10)
         }
-        assertEquals("\"8-4\" runs backwards.", error.message)
+        assertEquals("„8-4” ma odwróconą kolejność początku i końca.", error.message)
     }
 
     @Test
@@ -57,7 +57,7 @@ class PageRangesTest {
         val error = assertThrows(IllegalArgumentException::class.java) {
             PageRanges.parse("2", 1)
         }
-        assertEquals("This document only has 1 page.", error.message)
+        assertEquals("Liczba stron w tym dokumencie: 1.", error.message)
     }
 
     @Test
@@ -70,7 +70,7 @@ class PageRangesTest {
     fun `describe collapses consecutive runs`() {
         assertEquals("1-3, 5, 8-10", PageRanges.describe(listOf(0, 1, 2, 4, 7, 8, 9)))
         assertEquals("4", PageRanges.describe(listOf(3)))
-        assertEquals("none", PageRanges.describe(emptyList()))
+        assertEquals("brak", PageRanges.describe(emptyList()))
     }
 
     @Test

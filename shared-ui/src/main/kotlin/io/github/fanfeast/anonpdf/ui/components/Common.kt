@@ -71,7 +71,7 @@ fun AnonTopBar(
         navigationIcon = {
             if (onBack != null) {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Wstecz")
                 }
             }
         },
@@ -242,8 +242,8 @@ fun BusyOverlay(progress: Float?, message: String) {
 
 @Composable
 fun PasswordDialog(
-    title: String = "Password needed",
-    message: String = "This PDF is protected. Enter its password to continue.",
+    title: String = "Wymagane hasło",
+    message: String = "Ten PDF jest zabezpieczony. Wpisz hasło, aby kontynuować.",
     error: String? = null,
     onDismiss: () -> Unit,
     onConfirm: (String) -> Unit,
@@ -259,7 +259,7 @@ fun PasswordDialog(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Password") },
+                    label = { Text("Hasło") },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
@@ -276,10 +276,10 @@ fun PasswordDialog(
             TextButton(
                 onClick = { onConfirm(password) },
                 enabled = password.isNotEmpty(),
-            ) { Text("Unlock") }
+            ) { Text("Odblokuj") }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text("Anuluj") }
         },
     )
 }
@@ -313,14 +313,14 @@ fun RemovableRow(
         }
         if (onRemove != null) {
             IconButton(onClick = onRemove) {
-                Icon(Icons.Filled.Close, contentDescription = "Remove")
+                Icon(Icons.Filled.Close, contentDescription = "Usuń")
             }
         }
     }
 }
 
 fun formatBytes(bytes: Long): String {
-    if (bytes < 0) return "unknown size"
+    if (bytes < 0) return "nieznany rozmiar"
     if (bytes < 1024) return "$bytes B"
     val kilobytes = bytes / 1024.0
     if (kilobytes < 1024) return String.format(Locale.US, "%.0f KB", kilobytes)

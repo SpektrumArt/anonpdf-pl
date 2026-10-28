@@ -333,14 +333,14 @@ class EditPlanBuilderTest {
 
     @Test
     fun `op descriptions read as history a person can scan`() {
-        assertEquals("Rotate 90° · pages 1-2", RotatePages(90, setOf(0, 1)).describe())
-        assertEquals("Delete · page 3", DeletePages(setOf(2)).describe())
+        assertEquals("Obrót 90° · strony: 1-2", RotatePages(90, setOf(0, 1)).describe())
+        assertEquals("Usunięcie · strony: 3", DeletePages(setOf(2)).describe())
         assertEquals(
             "Crop 6% · page 1",
             CropPages(CropInsets(0.06f, 0.06f, 0.06f, 0.06f), setOf(0)).describe(),
         )
-        assertEquals("Scale 75% · page 1", ScalePages(0.75f, setOf(0)).describe())
-        assertEquals("Reverse page order", ReversePages.describe())
-        assertEquals("Remove watermark", SetWatermark(null).describe())
+        assertEquals("Skalowanie 75% · strony: 1", ScalePages(0.75f, setOf(0)).describe())
+        assertEquals("Odwrócenie kolejności stron", ReversePages.describe())
+        assertEquals("Usunięcie znaku wodnego", SetWatermark(null).describe())
     }
 }

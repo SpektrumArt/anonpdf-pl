@@ -107,7 +107,7 @@ fun ToolScreen(
      */
     fun addDocument(ref: DocumentRef, replace: Boolean) {
         scope.launch {
-            busyMessage = "Reading the file…"
+            busyMessage = "Odczytywanie pliku…"
             progress = 0f
             error = null
             try {
@@ -132,7 +132,7 @@ fun ToolScreen(
             } catch (e: CancellationException) {
                 throw e
             } catch (t: Throwable) {
-                error = t.friendlyMessage("That file could not be opened as a PDF.")
+                error = t.friendlyMessage("Nie udało się otworzyć tego pliku jako PDF.")
             } finally {
                 busyMessage = null
             }
@@ -147,14 +147,14 @@ fun ToolScreen(
         when (spec.input) {
             ToolInput.SINGLE_PDF -> dropped.pdfs.firstOrNull()
                 ?.let { addDocument(it, replace = true) }
-                ?: showMessage("Only a PDF can be used here.")
+                ?: showMessage("Można tu użyć tylko pliku PDF.")
             ToolInput.MULTIPLE_PDF -> if (dropped.pdfs.isEmpty()) {
-                showMessage("Only PDFs can be added here.")
+                showMessage("Można tu dodawać tylko pliki PDF.")
             } else {
                 dropped.pdfs.forEach { addDocument(it, replace = false) }
             }
             ToolInput.IMAGES -> if (dropped.images.isEmpty()) {
-                showMessage("Only pictures can be added here: JPEG, PNG, GIF or BMP.")
+                showMessage("Można tu dodawać tylko obrazy: JPEG, PNG, GIF lub BMP.")
             } else {
                 images = images + dropped.images
             }
@@ -195,13 +195,13 @@ fun ToolScreen(
                 }
 
                 // ---- input selection ------------------------------------
-                SectionLabel(if (spec.input == ToolInput.IMAGES) "Images" else "Document")
+                SectionLabel(if (spec.input == ToolInput.IMAGES) "Obrazy" else "Dokument")
 
                 when (spec.input) {
                     ToolInput.SINGLE_PDF -> {
                         val doc = docs.firstOrNull()
                         if (doc == null) {
-                            PickButton("Choose a PDF", Icons.Filled.Description) {
+                            PickButton("Wybierz PDF", Icons.Filled.Description) {
                                 pickSinglePdf()
                             }
                         } else {
@@ -214,7 +214,7 @@ fun ToolScreen(
                                 OutlinedButton(onClick = {
                                     passwordIndex = 0
                                     passwordError = null
-                                }) { Text("Enter password") }
+                                }) { Text("Wpisz hasło") }
                             }
                         }
                     }
@@ -228,14 +228,14 @@ fun ToolScreen(
                             )
                         }
                         Spacer(Modifier.height(8.dp))
-                        PickButton("Add PDFs", Icons.Filled.Add) {
+                        PickButton("Dodaj pliki PDF", Icons.Filled.Add) {
                             pickMultiplePdf()
                         }
                         if (docs.size in 1..1) {
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                "Add at least one more file. They are merged in the " +
-                                    "order listed above.",
+                                "Dodaj co najmniej jeszcze jeden plik. Zostaną połączone w " +
+                                    "kolejności widocznej powyżej.",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -245,15 +245,15 @@ fun ToolScreen(
                     ToolInput.IMAGES -> {
                         images.forEachIndexed { index, image ->
                             RemovableRow(
-                                text = image.fileName() ?: "Image ${index + 1}",
-                                supporting = "Image ${index + 1}",
+                                text = image.fileName() ?: "Obraz ${index + 1}",
+                                supporting = "Obraz ${index + 1}",
                                 onRemove = {
                                     images = images.filterIndexed { i, _ -> i != index }
                                 },
                             )
                         }
                         Spacer(Modifier.height(8.dp))
-                        PickButton("Add images", Icons.Filled.Image) {
+                        PickButton("Dodaj obrazy", Icons.Filled.Image) {
                             pickImages()
                         }
                     }
@@ -264,7 +264,7 @@ fun ToolScreen(
                     Spacer(Modifier.height(20.dp))
                     HorizontalDivider()
                     Spacer(Modifier.height(12.dp))
-                    SectionLabel("Options")
+                    SectionLabel("Opcje")
                     ToolOptions(
                         spec = spec,
                         options = options,
@@ -297,7 +297,7 @@ fun ToolScreen(
                             scope.launch {
                                 error = null
                                 progress = 0f
-                                busyMessage = "Working…"
+                                busyMessage = "Przetwarzanie…"
                                 try {
                                     result = runner.run(
                                         spec = spec,
@@ -308,7 +308,7 @@ fun ToolScreen(
                                 } catch (e: CancellationException) {
                                     throw e
                                 } catch (t: Throwable) {
-                                    error = t.friendlyMessage("That did not work.")
+                                    error = t.friendlyMessage("Operacja nie powiodła się.")
                                 } finally {
                                     busyMessage = null
                                 }
@@ -338,7 +338,7 @@ fun ToolScreen(
             passwordIndex = null
         } else {
             PasswordDialog(
-                message = "\"${doc.name}\" is protected. Enter its password to continue.",
+                message = "Plik „${doc.name}” jest zabezpieczony. Wpisz hasło, aby kontynuować.",
                 error = passwordError,
                 onDismiss = {
                     passwordIndex = null
@@ -347,7 +347,7 @@ fun ToolScreen(
                 onConfirm = { candidate ->
                     scope.launch {
                         try {
-                            val local = doc.localFile ?: error("File is missing.")
+                            val local = doc.localFile ?: error("Brak pliku.")
                             val meta = PdfOps.readMeta(local, candidate)
                             docs = docs.toMutableList().also { list ->
                                 list[index] = doc.copy(
@@ -361,11 +361,11 @@ fun ToolScreen(
                             passwordIndex = null
                             passwordError = null
                         } catch (t: PdfWrongPasswordException) {
-                            passwordError = "That password did not work."
+                            passwordError = "Nieprawidłowe hasło."
                         } catch (e: CancellationException) {
                             throw e
                         } catch (t: Throwable) {
-                            passwordError = t.friendlyMessage("Could not open the file.")
+                            passwordError = t.friendlyMessage("Nie udało się otworzyć pliku.")
                         }
                     }
                 },
@@ -389,9 +389,9 @@ private fun DocumentRow(doc: InputDoc, onRemove: () -> Unit, prefix: String? = n
     val supporting = listOfNotNull(
         doc.sizeBytes.takeIf { it >= 0 }?.let(::formatBytes),
         doc.pageCount.takeIf { it > 0 }
-            ?.let { "$it page${if (it == 1) "" else "s"}" },
-        if (doc.needsPassword) "locked" else null,
-        if (doc.password != null) "unlocked" else null,
+            ?.let { "Liczba stron: $it" },
+        if (doc.needsPassword) "zablokowany" else null,
+        if (doc.password != null) "odblokowany" else null,
     ).joinToString(" · ").ifEmpty { null }
     RemovableRow(
         text = listOfNotNull(prefix, doc.name).joinToString(" "),
@@ -404,14 +404,14 @@ private fun DocumentRow(doc: InputDoc, onRemove: () -> Unit, prefix: String? = n
 private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: Int) {
     when (spec.id) {
         ToolId.MERGE -> Text(
-            "Files are merged top to bottom. Remove and re-add a file to change " +
-                "its place.",
+            "Pliki są łączone od góry do dołu. Usuń i dodaj plik ponownie, aby zmienić " +
+                "jego pozycję.",
             style = MaterialTheme.typography.bodyMedium,
         )
 
         ToolId.SPLIT -> {
             ChoiceChips(
-                label = "How to split",
+                label = "Sposób podziału",
                 options = SplitMode.entries,
                 selected = options.splitMode,
                 onSelect = { options.splitMode = it },
@@ -419,10 +419,10 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             )
             Spacer(Modifier.height(16.dp))
             if (options.splitMode == SplitMode.RANGES) {
-                PageRangeField(options, pageCount, "One file per range")
+                PageRangeField(options, pageCount, "Osobny plik dla każdego zakresu")
             } else {
                 NumberStepper(
-                    label = "Pages per file",
+                    label = "Liczba stron w pliku",
                     value = options.splitEvery,
                     onChange = { options.splitEvery = it.coerceIn(1, maxOf(1, pageCount - 1)) },
                     range = 1..maxOf(1, pageCount - 1),
@@ -430,11 +430,11 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             }
         }
 
-        ToolId.EXTRACT -> PageRangeField(options, pageCount, "Pages to keep")
+        ToolId.EXTRACT -> PageRangeField(options, pageCount, "Strony do zachowania")
 
         ToolId.COMPRESS -> {
             ChoiceChips(
-                label = "Mode",
+                label = "Tryb",
                 options = CompressMode.entries,
                 selected = options.compressMode,
                 onSelect = { options.compressMode = it },
@@ -448,7 +448,7 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             )
             Spacer(Modifier.height(16.dp))
             ChoiceChips(
-                label = "Strength",
+                label = "Siła kompresji",
                 options = CompressStrength.entries,
                 selected = options.compressStrength,
                 onSelect = { options.compressStrength = it },
@@ -466,7 +466,7 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             )
             Spacer(Modifier.height(16.dp))
             LabeledSlider(
-                label = "Resolution",
+                label = "Rozdzielczość",
                 value = options.exportDpi.toFloat(),
                 onValueChange = { options.exportDpi = it.roundToInt() },
                 valueRange = 72f..400f,
@@ -474,7 +474,7 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             )
             if (options.exportFormat == ImageFormat.JPEG) {
                 LabeledSlider(
-                    label = "JPEG quality",
+                    label = "Jakość JPEG",
                     value = options.exportQuality.toFloat(),
                     onValueChange = { options.exportQuality = it.roundToInt() },
                     valueRange = 40f..100f,
@@ -485,13 +485,13 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
 
         ToolId.IMAGES_TO_PDF -> {
             ChoiceChips(
-                label = "Page size",
+                label = "Rozmiar strony",
                 options = PdfPageSizePreset.entries,
                 selected = options.imagesPageSize,
                 onSelect = { options.imagesPageSize = it },
                 optionLabel = {
                     when (it) {
-                        PdfPageSizePreset.FIT_IMAGE -> "Fit image"
+                        PdfPageSizePreset.FIT_IMAGE -> "Dopasuj do obrazu"
                         PdfPageSizePreset.A4 -> "A4"
                         PdfPageSizePreset.LETTER -> "Letter"
                     }
@@ -499,7 +499,7 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             )
             Spacer(Modifier.height(16.dp))
             LabeledSlider(
-                label = "Margin",
+                label = "Margines",
                 value = options.imagesMargin,
                 onValueChange = { options.imagesMargin = it },
                 valueRange = 0f..72f,
@@ -508,7 +508,7 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
         }
 
         ToolId.EXTRACT_TEXT -> Text(
-            "Text is written to a .txt file in reading order.",
+            "Tekst zostanie zapisany w pliku .txt w kolejności czytania.",
             style = MaterialTheme.typography.bodyMedium,
         )
 
@@ -516,7 +516,7 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             OutlinedTextField(
                 value = options.protectPassword,
                 onValueChange = { options.protectPassword = it },
-                label = { Text("New password") },
+                label = { Text("Nowe hasło") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -529,7 +529,7 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
             OutlinedTextField(
                 value = options.protectConfirm,
                 onValueChange = { options.protectConfirm = it },
-                label = { Text("Confirm password") },
+                label = { Text("Potwierdź hasło") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 isError = options.protectConfirm.isNotEmpty() &&
@@ -541,22 +541,22 @@ private fun ToolOptions(spec: ToolSpec, options: ToolOptionsState, pageCount: In
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(16.dp))
-            SectionLabel("Allow readers to")
-            CheckRow("Print", options.allowPrinting) { options.allowPrinting = it }
-            CheckRow("Copy text", options.allowCopying) { options.allowCopying = it }
-            CheckRow("Edit", options.allowModifying) { options.allowModifying = it }
+            SectionLabel("Zezwalaj na")
+            CheckRow("Drukowanie", options.allowPrinting) { options.allowPrinting = it }
+            CheckRow("Kopiowanie tekstu", options.allowCopying) { options.allowCopying = it }
+            CheckRow("Edytuj", options.allowModifying) { options.allowModifying = it }
             Spacer(Modifier.height(12.dp))
             InfoNote(
-                "AES-256 encryption, done on this device. AnonPDF never stores or " +
-                    "transmits the password — if you lose it the file cannot be opened. " +
-                    "The print, copy and edit limits are honoured by standard PDF " +
-                    "readers, but anyone with the password can use a tool to lift them.",
+                "Szyfrowanie AES-256 odbywa się na urządzeniu. AnonPDF nie zapisuje ani nie " +
+                    "wysyła hasła. Jeśli je zgubisz, nie otworzysz pliku. " +
+                    "Standardowe czytniki PDF respektują ograniczenia drukowania, kopiowania i edycji, " +
+                    "ale osoba znająca hasło może usunąć je odpowiednim narzędziem.",
             )
         }
 
         ToolId.UNLOCK -> Text(
-            "The password you entered when opening the file is used to remove its " +
-                "protection.",
+            "Do usunięcia zabezpieczenia zostanie użyte hasło podane podczas " +
+                "otwierania pliku.",
             style = MaterialTheme.typography.bodyMedium,
         )
 
@@ -573,7 +573,7 @@ private fun PageRangeField(options: ToolOptionsState, pageCount: Int, label: Str
             label = { Text(label) },
             placeholder = { Text("1-3, 5, 8-10") },
             supportingText = {
-                Text("This document has $pageCount page${if (pageCount == 1) "" else "s"}")
+                Text("Liczba stron dokumentu: $pageCount")
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -582,11 +582,11 @@ private fun PageRangeField(options: ToolOptionsState, pageCount: Int, label: Str
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = { options.pageRange = "1-$pageCount" }) {
-                Text("All pages")
+                Text("Wszystkie strony")
             }
             if (pageCount > 1) {
-                OutlinedButton(onClick = { options.pageRange = "1" }) { Text("First") }
-                OutlinedButton(onClick = { options.pageRange = "$pageCount" }) { Text("Last") }
+                OutlinedButton(onClick = { options.pageRange = "1" }) { Text("Pierwsza") }
+                OutlinedButton(onClick = { options.pageRange = "$pageCount" }) { Text("Ostatnia") }
             }
         }
     }

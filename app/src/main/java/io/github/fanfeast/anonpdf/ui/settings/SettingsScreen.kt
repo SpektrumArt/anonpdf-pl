@@ -50,7 +50,7 @@ fun SettingsScreen(onBack: () -> Unit) {
     val keepScreenOn by preferences.keepScreenOn.collectAsState(initial = false)
 
     Scaffold(
-        topBar = { AnonTopBar(title = "Settings", onBack = onBack) },
+        topBar = { AnonTopBar(title = "Ustawienia", onBack = onBack) },
         snackbarHost = { SnackbarHost(snackbarHost) },
     ) { padding ->
         Column(
@@ -60,17 +60,17 @@ fun SettingsScreen(onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
         ) {
-            SectionLabel("Reading")
+            SectionLabel("Czytanie")
             SwitchRow(
-                title = "Invert page colours",
-                subtitle = "Dark background for night reading. Only changes how pages " +
-                    "are drawn, never the file.",
+                title = "Odwróć kolory stron",
+                subtitle = "Ciemne tło do czytania w nocy. Zmienia tylko sposób wyświetlania " +
+                    "stron, bez modyfikacji pliku.",
                 checked = invertColors,
                 onChange = { scope.launch { preferences.setInvertPdfColors(it) } },
             )
             SwitchRow(
-                title = "Keep the screen on while reading",
-                subtitle = "Stops the display sleeping in the viewer.",
+                title = "Nie wygaszaj ekranu podczas czytania",
+                subtitle = "Zapobiega wygaszeniu ekranu w czytniku.",
                 checked = keepScreenOn,
                 onChange = { scope.launch { preferences.setKeepScreenOn(it) } },
             )
@@ -79,11 +79,11 @@ fun SettingsScreen(onBack: () -> Unit) {
             HorizontalDivider()
             Spacer(Modifier.height(12.dp))
 
-            SectionLabel("Privacy")
+            SectionLabel("Prywatność")
             SwitchRow(
-                title = "Remember recent files",
-                subtitle = "Keeps up to 20 file names on this device so you can reopen " +
-                    "them quickly. Switch this off and the list is deleted immediately.",
+                title = "Zapamiętuj ostatnie pliki",
+                subtitle = "Zapisuje na urządzeniu nazwy maksymalnie 20 plików, aby można było " +
+                    "szybko je otworzyć. Wyłączenie natychmiast usuwa listę.",
                 checked = rememberRecents,
                 onChange = { scope.launch { preferences.setRememberRecents(it) } },
             )
@@ -93,28 +93,28 @@ fun SettingsScreen(onBack: () -> Unit) {
                 onClick = {
                     scope.launch {
                         preferences.clearRecents()
-                        snackbarHost.showSnackbar("Recent files cleared.")
+                        snackbarHost.showSnackbar("Wyczyszczono listę ostatnich plików.")
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-            ) { Text("Clear recent files") }
+            ) { Text("Wyczyść ostatnie pliki") }
 
             Spacer(Modifier.height(10.dp))
             OutlinedButton(
                 onClick = {
                     scope.launch {
                         store.clearWorkspace()
-                        snackbarHost.showSnackbar("Temporary files deleted.")
+                        snackbarHost.showSnackbar("Usunięto pliki tymczasowe.")
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-            ) { Text("Delete temporary working files") }
+            ) { Text("Usuń tymczasowe pliki robocze") }
 
             Spacer(Modifier.height(20.dp))
             InfoNote(
-                "There is nothing else to configure, because there is nothing else " +
-                    "to switch off. AnonPDF has no account, no sync, no ads and no " +
-                    "network permission.",
+                "To wszystkie ustawienia. " +
+                    "AnonPDF nie wymaga konta, nie synchronizuje danych, nie wyświetla reklam i nie ma " +
+                    "uprawnienia do internetu.",
             )
             Spacer(Modifier.height(32.dp))
         }

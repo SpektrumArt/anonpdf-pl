@@ -35,7 +35,7 @@ private const val SOURCE_URL = "https://github.com/FanFeast/anonpdf"
 fun AboutScreen(onBack: () -> Unit) {
     val context = LocalContext.current
 
-    Scaffold(topBar = { AnonTopBar(title = "About", onBack = onBack) }) { padding ->
+    Scaffold(topBar = { AnonTopBar(title = "O aplikacji", onBack = onBack) }) { padding ->
         Column(
             Modifier
                 .padding(padding)
@@ -45,74 +45,74 @@ fun AboutScreen(onBack: () -> Unit) {
         ) {
             Text("AnonPDF", style = MaterialTheme.typography.headlineMedium)
             Text(
-                "Version ${BuildConfig.VERSION_NAME}",
+                "Wersja ${BuildConfig.VERSION_NAME}",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.height(20.dp))
 
             Text(
-                "A PDF reader and editor that does its work on your device and " +
-                    "nowhere else.",
+                "Czytnik i edytor PDF, który przetwarza dokumenty wyłącznie na urządzeniu. " +
+                    "",
                 style = MaterialTheme.typography.bodyLarge,
             )
 
             Spacer(Modifier.height(24.dp))
-            SectionLabel("What this app cannot do")
+            SectionLabel("Czego aplikacja nie robi")
             Bullet(
-                "Reach the network. AnonPDF declares no INTERNET permission, so " +
-                    "Android will refuse any connection it tried to make. There is no " +
-                    "server to upload to and no way to reach one.",
+                "Nie łączy się z internetem. AnonPDF nie deklaruje uprawnienia INTERNET, więc " +
+                    "Android zablokuje każdą próbę połączenia. Aplikacja nie korzysta " +
+                    "z serwera do wysyłania dokumentów.",
             )
             Bullet(
-                "Track you. No analytics, no crash reporting, no advertising SDK, " +
-                    "no device identifiers, no account.",
+                "Nie śledzi użytkownika. Bez analityki, raportów awarii, bibliotek reklamowych, " +
+                    "identyfikatorów urządzenia ani konta.",
             )
             Bullet(
-                "Charge you. Every tool is included. There is no paid tier and no " +
-                    "feature held back.",
-            )
-
-            Spacer(Modifier.height(24.dp))
-            SectionLabel("The one permission it asks for")
-            Bullet(
-                "All files access, so the browser can list the PDFs on your device " +
-                    "instead of making you find each one in the system picker. It is " +
-                    "used for reading documents and nothing else.",
-            )
-            Bullet(
-                "It is optional. Decline it and everything still works through the " +
-                    "picker, one file at a time.",
-            )
-            Bullet(
-                "Android calls this a \"special app access\", so it does not appear " +
-                    "on this app's Permissions page — that page says \"no permissions " +
-                    "requested\" either way. Look under Settings, Apps, Special app " +
-                    "access, All files access to see the real state.",
-            )
-            Bullet(
-                "Reading files still cannot leak them: without network permission " +
-                    "there is nowhere for them to go.",
+                "Nie pobiera opłat. Wszystkie narzędzia są dostępne. Nie ma płatnej wersji ani " +
+                    "zablokowanych funkcji.",
             )
 
             Spacer(Modifier.height(24.dp))
-            SectionLabel("What it stores")
+            SectionLabel("Uprawnienie, o które prosi")
             Bullet(
-                "A list of recently opened file names, kept in app-private storage " +
-                    "and excluded from cloud backup. You can switch it off or clear it " +
-                    "in Settings.",
+                "Dostęp do wszystkich plików pozwala wyświetlać pliki PDF na urządzeniu " +
+                    "bez każdorazowego wyszukiwania ich w oknie systemowym. Służy " +
+                    "wyłącznie do odczytywania dokumentów.",
             )
             Bullet(
-                "Working copies of the file you are editing, in the app cache. " +
-                    "These are temporary and Android may delete them at any time.",
+                "To uprawnienie jest opcjonalne. Po odmowie nadal można korzystać z " +
+                    "systemowego okna wyboru pojedynczych plików.",
             )
-            Bullet("Your display preferences. That is the entire list.")
+            Bullet(
+                "Android zalicza je do „specjalnego dostępu do aplikacji”, dlatego nie pojawia się " +
+                    "na zwykłej liście uprawnień aplikacji, która może pokazywać brak żądanych " +
+                    "uprawnień. Rzeczywisty stan sprawdzisz w: Ustawienia → Aplikacje → Specjalny " +
+                    "dostęp do aplikacji → Dostęp do wszystkich plików.",
+            )
+            Bullet(
+                "Sam odczyt plików nie umożliwia ich wysyłania: bez uprawnienia do internetu " +
+                    "aplikacja nie może nawiązać połączenia.",
+            )
+
+            Spacer(Modifier.height(24.dp))
+            SectionLabel("Co zapisuje")
+            Bullet(
+                "Listę nazw ostatnio otwieranych plików, w prywatnej pamięci aplikacji, " +
+                    "bez kopii zapasowej w chmurze. Możesz wyłączyć zapisywanie lub wyczyścić listę " +
+                    "w ustawieniach.",
+            )
+            Bullet(
+                "Robocze kopie edytowanego pliku w pamięci podręcznej aplikacji. " +
+                    "Są tymczasowe i Android może je w każdej chwili usunąć.",
+            )
+            Bullet("Ustawienia wyświetlania. To cała lista.")
 
             Spacer(Modifier.height(24.dp))
             InfoNote(
-                "You do not have to take any of this on trust. The source is public " +
-                    "and the permission list is visible in the app's Play Store entry " +
-                    "and in Android's own app info screen.",
+                "Możesz to sprawdzić. Kod źródłowy jest publiczny, " +
+                    "a lista uprawnień jest widoczna na stronie aplikacji w Google Play " +
+                    "oraz w informacjach o aplikacji w Androidzie.",
             )
 
             Spacer(Modifier.height(24.dp))
@@ -125,13 +125,13 @@ fun AboutScreen(onBack: () -> Unit) {
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-            ) { Text("View the source code") }
+            ) { Text("Zobacz kod źródłowy") }
 
             Spacer(Modifier.height(28.dp))
             HorizontalDivider()
             Spacer(Modifier.height(16.dp))
 
-            SectionLabel("Open source licences")
+            SectionLabel("Licencje otwartego oprogramowania")
             Licence(
                 "AnonPDF",
                 "MIT Licence. Copyright (c) 2026 the AnonPDF contributors.",
@@ -151,8 +151,8 @@ fun AboutScreen(onBack: () -> Unit) {
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Password protection uses AES-256 through Android's own cryptography " +
-                    "libraries. No third-party crypto library is bundled.",
+                "Ochrona hasłem korzysta z AES-256 i systemowych bibliotek kryptograficznych " +
+                    "Androida. Aplikacja nie zawiera zewnętrznej biblioteki kryptograficznej.",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

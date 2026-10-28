@@ -11,9 +11,9 @@ import io.github.fanfeast.anonpdf.pdf.PageRanges
 
 /** Which pages the next operation lands on. */
 enum class ApplyScope(val label: String) {
-    PAGE("This page"),
-    SELECTION("Selected"),
-    ALL("All pages"),
+    PAGE("Ta strona"),
+    SELECTION("Zaznaczone"),
+    ALL("Wszystkie strony"),
 }
 
 /**
@@ -165,10 +165,10 @@ class EditorState(val pageCount: Int) {
             plan.pages.indexOfFirst { it.sourceIndex == target }.takeIf { it >= 0 }
         }.sorted()
         return when {
-            positions.isEmpty() -> "no pages"
-            positions.size == plan.pages.size -> "all ${positions.size} pages"
-            positions.size == 1 -> "page ${positions.first() + 1}"
-            else -> "pages " + PageRanges.describe(positions)
+            positions.isEmpty() -> "brak stron"
+            positions.size == plan.pages.size -> "wszystkie strony: ${positions.size}"
+            positions.size == 1 -> "strona ${positions.first() + 1}"
+            else -> "strony: " + PageRanges.describe(positions)
         }
     }
 

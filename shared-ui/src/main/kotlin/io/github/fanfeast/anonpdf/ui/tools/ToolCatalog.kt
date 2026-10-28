@@ -41,10 +41,10 @@ enum class ToolInput { SINGLE_PDF, MULTIPLE_PDF, IMAGES }
 enum class ToolOutput { PDF, TEXT, MANY_FILES }
 
 enum class ToolGroup(val label: String) {
-    FILES("Whole files"),
-    CONVERT("Convert & compress"),
-    MARKUP("Markup"),
-    SECURITY("Security"),
+    FILES("Całe pliki"),
+    CONVERT("Konwersja i kompresja"),
+    MARKUP("Adnotacje"),
+    SECURITY("Zabezpieczenia"),
 }
 
 data class ToolSpec(
@@ -66,8 +66,8 @@ object ToolCatalog {
     val all: List<ToolSpec> = listOf(
         ToolSpec(
             id = ToolId.MERGE,
-            title = "Merge PDFs",
-            summary = "Join several files into one, in the order you pick them",
+            title = "Połącz pliki PDF",
+            summary = "Połącz kilka plików w jeden w wybranej kolejności",
             icon = Icons.AutoMirrored.Filled.MergeType,
             group = ToolGroup.FILES,
             input = ToolInput.MULTIPLE_PDF,
@@ -75,8 +75,8 @@ object ToolCatalog {
         ),
         ToolSpec(
             id = ToolId.SPLIT,
-            title = "Split PDF",
-            summary = "Break one document into several files by page range",
+            title = "Podziel PDF",
+            summary = "Podziel dokument na pliki według zakresów stron",
             icon = Icons.Filled.ContentCut,
             group = ToolGroup.FILES,
             input = ToolInput.SINGLE_PDF,
@@ -84,8 +84,8 @@ object ToolCatalog {
         ),
         ToolSpec(
             id = ToolId.EXTRACT,
-            title = "Extract pages",
-            summary = "Pull chosen pages out into a single new PDF",
+            title = "Wyodrębnij strony",
+            summary = "Zapisz wybrane strony w nowym pliku PDF",
             icon = Icons.Filled.FilterNone,
             group = ToolGroup.FILES,
             input = ToolInput.SINGLE_PDF,
@@ -93,8 +93,8 @@ object ToolCatalog {
         ),
         ToolSpec(
             id = ToolId.COMPRESS,
-            title = "Compress PDF",
-            summary = "Make the file smaller by re-encoding its images",
+            title = "Kompresuj PDF",
+            summary = "Zmniejsz plik przez ponowne zakodowanie obrazów",
             icon = Icons.Filled.Compress,
             group = ToolGroup.CONVERT,
             input = ToolInput.SINGLE_PDF,
@@ -102,8 +102,8 @@ object ToolCatalog {
         ),
         ToolSpec(
             id = ToolId.PDF_TO_IMAGES,
-            title = "PDF to images",
-            summary = "Save every page as a JPG or PNG",
+            title = "PDF na obrazy",
+            summary = "Zapisz każdą stronę jako JPG lub PNG",
             icon = Icons.Filled.Image,
             group = ToolGroup.CONVERT,
             input = ToolInput.SINGLE_PDF,
@@ -111,8 +111,8 @@ object ToolCatalog {
         ),
         ToolSpec(
             id = ToolId.IMAGES_TO_PDF,
-            title = "Images to PDF",
-            summary = "Build a PDF from photos or scans",
+            title = "Obrazy na PDF",
+            summary = "Utwórz PDF ze zdjęć lub skanów",
             icon = Icons.Filled.PictureAsPdf,
             group = ToolGroup.CONVERT,
             input = ToolInput.IMAGES,
@@ -120,31 +120,31 @@ object ToolCatalog {
         ),
         ToolSpec(
             id = ToolId.EXTRACT_TEXT,
-            title = "Extract text",
-            summary = "Pull the text out into a plain .txt file",
+            title = "Wyodrębnij tekst",
+            summary = "Zapisz tekst w pliku .txt",
             icon = Icons.AutoMirrored.Filled.Article,
             group = ToolGroup.CONVERT,
             input = ToolInput.SINGLE_PDF,
             output = ToolOutput.TEXT,
-            caveat = "Only finds real text. Scanned pages are pictures, so they " +
-                "come out empty — reading them would need OCR, which AnonPDF does not do.",
+            caveat = "Wykrywa tylko właściwy tekst. Skany są obrazami, więc " +
+                "wynik będzie pusty. Ich odczyt wymaga OCR, którego AnonPDF nie obsługuje.",
         ),
         ToolSpec(
             id = ToolId.SIGN,
-            title = "Sign PDF",
-            summary = "Draw your signature and place it on a page",
+            title = "Podpisz PDF",
+            summary = "Narysuj podpis i umieść go na stronie",
             icon = Icons.Filled.Draw,
             group = ToolGroup.MARKUP,
             input = ToolInput.SINGLE_PDF,
             output = ToolOutput.PDF,
             hasCustomScreen = true,
-            caveat = "This draws your signature onto the page as an image. " +
-                "It is not a cryptographic digital signature.",
+            caveat = "Umieszcza obraz podpisu na stronie. " +
+                "Nie jest to kryptograficzny podpis cyfrowy.",
         ),
         ToolSpec(
             id = ToolId.PROTECT,
-            title = "Protect PDF",
-            summary = "Add a password, with AES-256 encryption",
+            title = "Zabezpiecz PDF",
+            summary = "Ustaw hasło z szyfrowaniem AES-256",
             icon = Icons.Filled.Lock,
             group = ToolGroup.SECURITY,
             input = ToolInput.SINGLE_PDF,
@@ -152,8 +152,8 @@ object ToolCatalog {
         ),
         ToolSpec(
             id = ToolId.UNLOCK,
-            title = "Remove password",
-            summary = "Strip protection from a PDF you know the password to",
+            title = "Usuń hasło",
+            summary = "Usuń zabezpieczenie PDF, którego hasło znasz",
             icon = Icons.Filled.LockOpen,
             group = ToolGroup.SECURITY,
             input = ToolInput.SINGLE_PDF,
