@@ -113,8 +113,8 @@ fun SettingsScreen(onBack: () -> Unit) {
             Spacer(Modifier.height(20.dp))
             InfoNote(
                 "To wszystkie ustawienia. " +
-                    "AnonPDF nie wymaga konta, nie synchronizuje danych, nie wyświetla reklam i nie ma " +
-                    "uprawnienia do internetu.",
+                    "AnonPDF nie wymaga konta, nie synchronizuje danych i nie wyświetla reklam. Ma " +
+                    "dostęp do internetu wyłącznie do importu PDF na Twoje żądanie.",
             )
             Spacer(Modifier.height(32.dp))
         }

@@ -3,13 +3,17 @@
 [![Kompilacja](https://github.com/FanFeast/anonpdf/actions/workflows/build.yml/badge.svg)](https://github.com/FanFeast/anonpdf/actions/workflows/build.yml)
 [![Licencja: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 [![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84.svg)](#wymagania)
-[![Bez dostępu do sieci](https://img.shields.io/badge/network-none-success.svg)](#gwarancja-prywatności-i-jak-ją-sprawdzić)
+[![Import HTTPS](https://img.shields.io/badge/network-HTTPS_import-blue.svg)](#gwarancja-prywatności-i-jak-ją-sprawdzić)
 
 Czytnik i edytor PDF na Androida, który przetwarza dokumenty wyłącznie na Twoim urządzeniu.
 
-**Bez reklam. Bez kont. Bez śledzenia. Bez płatnej wersji. Bez uprawnienia do internetu.**
+**Wariant PL 1.01: import PDF z łączy HTTPS i drukowanie. Bez reklam, kont i analityki.**
 
-AnonPDF powstał, ponieważ niemal każda inna aplikacja PDF w Google Play wydaje się wymagać subskrypcji, konta w chmurze i dostępu do Twoich dokumentów. Ta nie potrzebuje żadnej z tych rzeczy. Nie może wysyłać Twoich plików, ponieważ nie ma uprawnienia do korzystania z sieci. To nie obietnica w polityce prywatności, lecz ograniczenie egzekwowane przez system operacyjny.
+W przeglądarce wybierz **Udostępnij → AnonPDF**, potwierdź pobranie PDF i użyj **Drukuj**. Po zmianie rozmiaru w edytorze wybierz **Drukuj** na karcie wyniku. Szczegóły: [instrukcja 1.01](docs/Internet-drukowanie-1.01.md).
+
+Ta wersja ma uprawnienie INTERNET. Poprzednia gwarancja braku połączeń sieciowych nie obowiązuje. Pliki są edytowane lokalnie; import pobiera wskazany dokument dopiero po potwierdzeniu. Serwer źródłowy otrzymuje żądanie, parametry adresu i adres IP. Drukowanie przekazuje PDF do wybranej usługi drukowania.
+
+AnonPDF PL jest polskim wariantem otwartego projektu [FanFeast/anonpdf](https://github.com/FanFeast/anonpdf). Dodaje import internetowy i systemowe drukowanie do lokalnego edytora PDF.
 
 | Biblioteka | Czytanie | Twoje pliki |
 |---|---|---|
@@ -46,24 +50,9 @@ Podgląd nie jest przybliżeniem. Tworzy go ten sam kod, który zapisuje plik wy
 
 ## Gwarancja prywatności i jak ją sprawdzić
 
-AnonPDF deklaruje dokładnie **jedno** uprawnienie:
+Wariant PL 1.01 deklaruje INTERNET do importu PDF oraz opcjonalne MANAGE_EXTERNAL_STORAGE do przeglądania plików. AndroidX dodaje uprawnienie chroniące prywatny odbiornik aplikacji. Aplikacja nie zawiera analityki ani reklam. Kopie zapasowe są wyłączone.
 
-```
-android.permission.MANAGE_EXTERNAL_STORAGE
-```
-
-Pozwala ono wbudowanej przeglądarce wyświetlać pliki PDF na urządzeniu bez każdorazowego korzystania z systemowego okna wyboru. Jest **opcjonalne** — po odmowie nadal można używać wszystkich funkcji przez systemowe okno wyboru, które nie wymaga tego uprawnienia.
-
-Dostęp do wszystkich plików należy do *specjalnego dostępu do aplikacji*. Jego przełącznik znajdziesz w: Ustawienia → Aplikacje → Specjalny dostęp do aplikacji → Dostęp do wszystkich plików. **Nie pojawia się** na zwykłej stronie „Uprawnienia” aplikacji. Może ona wyświetlać informację „Nie zażądano uprawnień”, nawet gdy dostęp jest przyznany. Nie traktuj więc tego ekranu jako potwierdzenia stanu dostępu.
-
-Co możesz sprawdzić:
-
-- **Brak uprawnienia `INTERNET`.** Jądro systemu odrzuca wychodzące połączenia przez gniazda sieciowe. Nie ma serwera, telemetrii, raportowania awarii ani sieci reklamowej. Testy sprawdzają, że zarówno otwarcie gniazda, jak i rozwiązanie nazwy hosta rzeczywiście kończą się niepowodzeniem.
-- **Brak bibliotek analitycznych i reklamowych.** Pełna lista zależności znajduje się w `gradle/libs.versions.toml`: AndroidX, Kotlin i PdfBox-Android.
-- **`allowBackup=false`** oraz jawne reguły wykluczenia z kopii zapasowych zapobiegają przenoszeniu dokumentów przez kopię w chmurze lub transfer między urządzeniami.
-- **Test przerywający kompilację**, gdy w scalonym manifeście pojawi się inne uprawnienie niż wymienione powyżej. Zobacz [`PrivacyContractTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/PrivacyContractTest.kt).
-
-Możesz samodzielnie sprawdzić gotowy plik:
+Pobranie wymaga potwierdzenia, obsługuje HTTPS, najwyżej pięć przekierowań i pliki do 50 MB. Nie korzysta z sesji przeglądarki. Brak uprawnienia INTERNET nie jest już gwarancją systemową tego wariantu. Aktualne zasady opisuje [PRIVACY.md](PRIVACY.md).
 
 ```bash
 apkanalyzer manifest permissions app-release.apk
@@ -106,6 +95,12 @@ To pełna lista. Nie ma identyfikatorów użytkownika, pierwszego uruchomienia a
 - Numeracja stron z szablonem formatu, pozycją, numerem początkowym i pomijaniem stron początkowych, np. okładki.
 - Stosowanie zmian do pojedynczej strony, zaznaczenia lub całego dokumentu.
 
+**Import i drukowanie**
+
+- Odbieranie pliku PDF oraz łącza HTTPS udostępnionego z przeglądarki.
+- Drukowanie otwartego lub edytowanego PDF przez system Android.
+- Centrowanie i pomniejszanie do obszaru wydruku bez automatycznego powiększania małych stron.
+
 **Operacje na całych plikach**
 
 - Łączenie kilku plików PDF w jeden.
@@ -135,8 +130,8 @@ Projekt jasno określa ograniczenia zamiast udostępniać niepełne rozwiązania
 ## Kompilacja
 
 ```bash
-git clone https://github.com/FanFeast/anonpdf.git
-cd anonpdf
+git clone https://github.com/SpektrumArt/anonpdf-pl.git
+cd anonpdf-pl
 ./gradlew assembleDebug
 ```
 
@@ -158,7 +153,7 @@ sdk.dir=/path/to/Android/Sdk
 
 Testy silnika wymagające renderowania — obejmujące wszystkie operacje i porównanie podglądu z eksportem — znajdują się w `shared-engine/src/deviceTest`. Są uruchamiane zarówno w zestawie testów Androida, jak i wersji komputerowej. CI uruchamia testy silnika komputerowego na Linuksie i Windowsie.
 
-Najszerszy zakres weryfikacji zapewniają testy na urządzeniu. Tworzą pliki PDF, wykonują każdą operację i sprawdzają wyniki: liczbę i kolejność stron po reorganizacji, obszary przycięcia, geometrię skalowania, szyfrowanie i odszyfrowywanie, stopień kompresji, numerację zgodną z końcową kolejnością, wyrenderowane piksele znaku wodnego oraz dokładną zgodność podglądu z eksportem. Dwa testy powstały, ponieważ ich słabsze wersje przechodziły mimo błędnego kodu: skalowanie jest sprawdzane przez ponowne renderowanie i porównanie całego układu, a nie tylko wymiarów stron, zaś przycinanie jest sprawdzane na obróconej stronie. Testy weryfikują też zasady prywatności, w tym niepowodzenie połączenia przez gniazdo sieciowe i zapytania DNS.
+Najszerszy zakres weryfikacji zapewniają testy na urządzeniu. Tworzą pliki PDF, wykonują każdą operację i sprawdzają wyniki: liczbę i kolejność stron po reorganizacji, obszary przycięcia, geometrię skalowania, szyfrowanie i odszyfrowywanie, stopień kompresji, numerację zgodną z końcową kolejnością, wyrenderowane piksele znaku wodnego oraz dokładną zgodność podglądu z eksportem. Dwa testy powstały, ponieważ ich słabsze wersje przechodziły mimo błędnego kodu: skalowanie jest sprawdzane przez ponowne renderowanie i porównanie całego układu, a nie tylko wymiarów stron, zaś przycinanie jest sprawdzane na obróconej stronie. Testy weryfikują też zasady prywatności, w tym listę dozwolonych uprawnień i wyłączone kopie zapasowe.
 
 [`AppSmokeTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/ui/AppSmokeTest.kt) steruje rzeczywistym interfejsem. Uruchamia aplikację, odwiedza każdy ekran dostępny z ekranu głównego, w tym wszystkie narzędzia, i wraca. Przekazuje też PDF przez „Otwórz za pomocą” i „Udostępnij”, sprawdzając renderowanie w czytniku i otwieranie w edytorze.
 

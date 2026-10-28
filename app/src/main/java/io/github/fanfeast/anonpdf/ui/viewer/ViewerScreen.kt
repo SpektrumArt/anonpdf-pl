@@ -75,6 +75,8 @@ import io.github.fanfeast.anonpdf.ui.components.ErrorNote
 import io.github.fanfeast.anonpdf.ui.components.PasswordDialog
 import io.github.fanfeast.anonpdf.ui.components.friendlyMessage
 import kotlinx.coroutines.CancellationException
+import androidx.compose.material.icons.filled.Print
+import io.github.fanfeast.anonpdf.printing.PdfPrinting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -246,6 +248,16 @@ fun ViewerScreen(
     Scaffold(
         topBar = {
             AnonTopBar(title = title, onBack = onBack) {
+                IconButton(onClick = {
+                    val ready = document ?: return@IconButton
+                    scope.launch {
+                        try { PdfPrinting.start(context, ready.textSource, title, ready.password) }
+                        catch (e: CancellationException) { throw e }
+                        catch (e: Exception) { error = e.friendlyMessage("Nie udało się rozpocząć drukowania.") }
+                    }
+                }, enabled = document != null) {
+                    Icon(Icons.Filled.Print, contentDescription = "Drukuj")
+                }
                 IconButton(onClick = { searchOpen = true }, enabled = document != null) {
                     Icon(Icons.Filled.Search, contentDescription = "Szukaj tekstu")
                 }

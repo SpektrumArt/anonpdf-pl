@@ -183,7 +183,7 @@ fun HomeScreen(
             item {
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "Bez reklam, analityki, konta i uprawnienia do internetu. " +
+                    "Bez reklam, analityki i konta. Import PDF przez HTTPS. " +
                         "Otwarty kod źródłowy.",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -211,12 +211,12 @@ private fun PrivacyBanner() {
             Spacer(Modifier.width(14.dp))
             Column {
                 Text(
-                    "Dokumenty pozostają na telefonie",
+                    "Edycja na telefonie, import z internetu",
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    "AnonPDF nie ma uprawnienia do internetu, więc Android nie pozwoli " +
-                        "na wysłanie Twoich dokumentów. " +
+                    "Ta wersja ma dostęp do internetu do pobierania PDF z udostępnionego łącza. " +
+                        "Pobieranie rozpoczyna się po Twoim potwierdzeniu. " +
                         "Bez konta, reklam i śledzenia.",
                     style = MaterialTheme.typography.bodyMedium,
                 )

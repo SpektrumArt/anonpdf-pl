@@ -2,25 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--
-      The promise AnonPDF keeps is that documents cannot leave the device. That
-      rests on having no network permission at all: the entries below are removed
-      from the merged manifest, so if any dependency ever tries to introduce
-      them the build strips them out again. Without INTERNET the kernel refuses
-      outbound sockets, which is enforcement rather than a policy statement.
-    -->
-    <uses-permission
-        android:name="android.permission.INTERNET"
-        tools:node="remove" />
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"
-        tools:node="remove" />
+    <!-- Explicit HTTPS PDF import. No analytics, ads, cookies or document uploads. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
 
     <!--
       Storage access, so the app can browse and open PDFs directly instead of
       routing every single file through the system picker.
 
-      This is the only permission declared, and deliberately so. Under scoped
+      Under scoped
       storage READ_EXTERNAL_STORAGE and READ_MEDIA_IMAGES only reach *media*;
       a PDF sitting in Downloads is not media, so neither of them would let the
       browser list anything. Declaring them would add Play friction for no
@@ -38,6 +28,7 @@
     <application
         android:name=".AnonPdfApplication"
         android:allowBackup="false"
+        android:usesCleartextTraffic="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -70,6 +61,14 @@
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/pdf" />
+            </intent-filter>
+
+            <!-- Browsers share PDF URLs as text, including signed URLs without .pdf. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="text/uri-list" />
             </intent-filter>
         </activity>
 

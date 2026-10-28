@@ -35,6 +35,9 @@ import androidx.documentfile.provider.DocumentFile
 import io.github.fanfeast.anonpdf.pdf.DocumentStore
 import io.github.fanfeast.anonpdf.ui.tools.ToolResult
 import kotlinx.coroutines.Dispatchers
+import androidx.compose.material.icons.filled.Print
+import io.github.fanfeast.anonpdf.printing.PdfPrinting
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -45,8 +48,8 @@ import java.io.File
  *
  * Saving goes through the Storage Access Framework, so the destination is chosen
  * by the user in the system picker and the app never needs a storage permission.
- * Sharing is an explicit, user-initiated handoff — AnonPDF itself has no network
- * permission and cannot send anything anywhere on its own.
+ * Sharing and printing are explicit user-initiated handoffs. Network access is used
+ * separately for confirmed HTTPS PDF imports.
  */
 @Composable
 fun ResultCard(
@@ -165,6 +168,20 @@ fun ResultCard(
                 }
             }
 
+            if (result is ToolResult.One && !result.isText) {
+                Spacer(Modifier.height(8.dp))
+                OutlinedButton(onClick = {
+                    scope.launch {
+                        try { PdfPrinting.start(context, result.file, result.suggestedName) }
+                        catch (e: CancellationException) { throw e }
+                        catch (e: Exception) { onMessage(e.friendlyMessage("Nie udało się rozpocząć drukowania.")) }
+                    }
+                }, modifier = Modifier.fillMaxWidth()) {
+                    Icon(Icons.Filled.Print, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Drukuj")
+                }
+            }
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(

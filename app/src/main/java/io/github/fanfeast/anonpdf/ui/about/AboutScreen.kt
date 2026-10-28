@@ -29,7 +29,7 @@ import io.github.fanfeast.anonpdf.ui.components.AnonTopBar
 import io.github.fanfeast.anonpdf.ui.components.InfoNote
 import io.github.fanfeast.anonpdf.ui.components.SectionLabel
 
-private const val SOURCE_URL = "https://github.com/FanFeast/anonpdf"
+private const val SOURCE_URL = "https://github.com/SpektrumArt/anonpdf-pl"
 
 @Composable
 fun AboutScreen(onBack: () -> Unit) {
@@ -58,44 +58,13 @@ fun AboutScreen(onBack: () -> Unit) {
             )
 
             Spacer(Modifier.height(24.dp))
-            SectionLabel("Czego aplikacja nie robi")
-            Bullet(
-                "Nie łączy się z internetem. AnonPDF nie deklaruje uprawnienia INTERNET, więc " +
-                    "Android zablokuje każdą próbę połączenia. Aplikacja nie korzysta " +
-                    "z serwera do wysyłania dokumentów.",
-            )
-            Bullet(
-                "Nie śledzi użytkownika. Bez analityki, raportów awarii, bibliotek reklamowych, " +
-                    "identyfikatorów urządzenia ani konta.",
-            )
-            Bullet(
-                "Nie pobiera opłat. Wszystkie narzędzia są dostępne. Nie ma płatnej wersji ani " +
-                    "zablokowanych funkcji.",
-            )
-
-            Spacer(Modifier.height(24.dp))
-            SectionLabel("Uprawnienie, o które prosi")
-            Bullet(
-                "Dostęp do wszystkich plików pozwala wyświetlać pliki PDF na urządzeniu " +
-                    "bez każdorazowego wyszukiwania ich w oknie systemowym. Służy " +
-                    "wyłącznie do odczytywania dokumentów.",
-            )
-            Bullet(
-                "To uprawnienie jest opcjonalne. Po odmowie nadal można korzystać z " +
-                    "systemowego okna wyboru pojedynczych plików.",
-            )
-            Bullet(
-                "Android zalicza je do „specjalnego dostępu do aplikacji”, dlatego nie pojawia się " +
-                    "na zwykłej liście uprawnień aplikacji, która może pokazywać brak żądanych " +
-                    "uprawnień. Rzeczywisty stan sprawdzisz w: Ustawienia → Aplikacje → Specjalny " +
-                    "dostęp do aplikacji → Dostęp do wszystkich plików.",
-            )
-            Bullet(
-                "Sam odczyt plików nie umożliwia ich wysyłania: bez uprawnienia do internetu " +
-                    "aplikacja nie może nawiązać połączenia.",
-            )
-
-            Spacer(Modifier.height(24.dp))
+            SectionLabel("Internet i prywatność")
+            Bullet("Ta wersja ma uprawnienie INTERNET, aby pobierać PDF z łączy HTTPS udostępnionych z przeglądarki. Każde pobranie wymaga potwierdzenia. Serwer źródłowy otrzyma żądanie, adres IP i parametry łącza.")
+            Bullet("Edycja dokumentów odbywa się na urządzeniu. Aplikacja nie ma reklam, analityki ani konta i nie wysyła plików na serwer edycji. Brak dostępu do internetu nie jest już gwarancją systemową tej wersji.")
+            Bullet("Drukowanie przekazuje wybrany dokument do systemowej usługi drukowania. Może ona przesłać go do wskazanej drukarki.")
+            SectionLabel("Dostęp do plików")
+            Bullet("Dostęp do wszystkich plików jest opcjonalny i służy do przeglądania PDF. Możesz zamiast niego używać systemowego okna wyboru.")
+            Spacer(Modifier.height(12.dp))
             SectionLabel("Co zapisuje")
             Bullet(
                 "Listę nazw ostatnio otwieranych plików, w prywatnej pamięci aplikacji, " +

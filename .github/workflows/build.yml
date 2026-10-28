@@ -50,13 +50,10 @@ jobs:
                      app/build/outputs/apk/release/app-release-unsigned.apk; do
           echo "Checking $APK"
           test -f "$APK" || { echo "Missing $APK"; exit 1; }
-          # The app is allowed exactly two entries: storage access for the file
-          # browser, and AndroidX's signature-level self-receiver guard. Anything
-          # else is a regression in the promise that documents cannot leave the
-          # device, so fail the build and make someone justify it.
+          # Allow storage, explicit HTTPS imports and the AndroidX receiver guard.
           FOUND=$("$AAPT" dump permissions "$APK" \
             | grep '^uses-permission' \
-            | grep -vE 'MANAGE_EXTERNAL_STORAGE|DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION' \
+            | grep -vE 'MANAGE_EXTERNAL_STORAGE|DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION|android.permission.INTERNET' \
             || true)
           if [ -n "$FOUND" ]; then
             echo "Unexpected permissions in the merged manifest:"
@@ -64,15 +61,14 @@ jobs:
             echo "If intentional, update PRIVACY.md, PrivacyContractTest and this check."
             exit 1
           fi
-          # And nothing that could move a file off the device, ever.
+          # INTERNET is reviewed for explicit HTTPS PDF import; no network-state access.
           NETWORK=$("$AAPT" dump permissions "$APK" \
-            | grep -E 'INTERNET|ACCESS_NETWORK_STATE|ACCESS_WIFI_STATE' || true)
+            | grep -E 'ACCESS_NETWORK_STATE|ACCESS_WIFI_STATE' || true)
           if [ -n "$NETWORK" ]; then
-            echo "Network permission present, which breaks the core guarantee:"
-            echo "$NETWORK"
+            echo "Unexpected network-state permission: $NETWORK"
             exit 1
           fi
-          echo "Permissions are as reviewed, and no network access. Good."
+          echo "Permissions match the reviewed HTTPS-import variant."
           done
 
       - name: Upload debug APK
