@@ -24,8 +24,8 @@ android {
         applicationId = "io.github.fanfeast.anonpdf"
         minSdk = 31
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.01"
+        versionCode = 3
+        versionName = "1.02"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

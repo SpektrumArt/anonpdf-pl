@@ -231,7 +231,9 @@ fun ViewerScreen(
         } catch (e: CancellationException) {
             throw e
         } catch (t: Throwable) {
-            error = t.friendlyMessage("Nie udało się otworzyć tego pliku jako PDF.")
+            error = if (t.message?.contains("Unable to load the document", ignoreCase = true) == true) {
+                "Systemowy czytnik nie może otworzyć tego PDF. Pobierz oryginalny plik w przeglądarce i spróbuj otworzyć go ponownie."
+            } else t.friendlyMessage("Nie udało się otworzyć tego pliku jako PDF.")
         } finally {
             loading = false
         }

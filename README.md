@@ -7,9 +7,11 @@
 
 Czytnik i edytor PDF na Androida, który przetwarza dokumenty wyłącznie na Twoim urządzeniu.
 
-**Wariant PL 1.01: import PDF z łączy HTTPS i drukowanie. Bez reklam, kont i analityki.**
+**Wariant PL 1.02: import PDF z łączy HTTPS i drukowanie. Bez reklam, kont i analityki.**
 
 W przeglądarce wybierz **Udostępnij → AnonPDF**, potwierdź pobranie PDF i użyj **Drukuj**. Po zmianie rozmiaru w edytorze wybierz **Drukuj** na karcie wyniku. Szczegóły: [instrukcja 1.01](docs/Internet-drukowanie-1.01.md).
+
+Poprawka udostępniania 1.02: link tekstowy jest wybierany przed miniaturą podglądu. [Szczegóły](docs/Poprawka-udostepniania-1.02.md).
 
 Ta wersja ma uprawnienie INTERNET. Poprzednia gwarancja braku połączeń sieciowych nie obowiązuje. Pliki są edytowane lokalnie; import pobiera wskazany dokument dopiero po potwierdzeniu. Serwer źródłowy otrzymuje żądanie, parametry adresu i adres IP. Drukowanie przekazuje PDF do wybranej usługi drukowania.
 

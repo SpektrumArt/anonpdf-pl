@@ -19,6 +19,9 @@ import kotlinx.coroutines.CancellationException
 import androidx.core.net.toUri
 import io.github.fanfeast.anonpdf.net.PdfLink
 import io.github.fanfeast.anonpdf.net.PdfDownload
+import io.github.fanfeast.anonpdf.net.SharedPdfInput
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -109,24 +112,52 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** File shares and text links are separate: remote addresses never enter DocumentStore. */
+    /** Prefer a browser's shared URL over its preview image. Explicit PDF streams still win. */
     private fun receive(intent: Intent?) {
-        val candidate = when (intent?.action) {
-            Intent.ACTION_VIEW -> intent.data
-            Intent.ACTION_SEND -> IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
-                ?: intent.clipData?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.uri
-            else -> null
-        }
-        if (candidate != null && candidate.scheme in listOf("content", "file")) {
-            cancelDownload()
-            pendingUri = candidate
-            return
-        }
         if (intent?.action != Intent.ACTION_SEND && intent?.action != Intent.ACTION_VIEW) return
-        val text = candidate?.toString() ?: intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString().orEmpty()
-        val link = PdfLink.find(text)
+        val stream = IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+        val clip = intent.clipData
+        val texts = (0 until (clip?.itemCount ?: 0)).mapNotNull { clip?.getItemAt(it)?.text?.toString() }
+        val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
+        val candidate = if (intent.action == Intent.ACTION_VIEW) intent.data
+            else stream ?: clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.uri
+        val sharedLink = if (intent.action == Intent.ACTION_SEND)
+            SharedPdfInput.preferredLink(intent.type, stream != null, text, texts) else null
+        val fallback = SharedPdfInput.anyLink(text, texts) ?: candidate?.toString()?.let(PdfLink::find)
         cancelDownload()
-        if (link != null) pendingLink = link.toString()
-        else downloadError = "Udostępnij plik PDF lub bezpośrednie łącze HTTPS do dokumentu."
+        downloadError = null
+        if (sharedLink != null) {
+            pendingLink = sharedLink.toString()
+        } else if (candidate != null && candidate.scheme in listOf("content", "file")) {
+            openSharedFile(candidate, fallback)
+        } else if (fallback != null) {
+            pendingLink = fallback.toString()
+        } else {
+            downloadError = "Udostępnij plik PDF lub bezpośrednie łącze HTTPS do dokumentu."
+        }
+    }
+
+    /** Copy while the browser's temporary URI grant is valid; never send thumbnails to PdfRenderer. */
+    private fun openSharedFile(uri: Uri, fallback: java.net.URI?) {
+        downloadJob = lifecycleScope.launch {
+            var copy: java.io.File? = null
+            try {
+                val store = DocumentStore(this@MainActivity)
+                copy = store.materialize(uri, store.displayName(uri))
+                val valid = withContext(Dispatchers.IO) { SharedPdfInput.hasPdfHeader(copy!!) }
+                if (valid) {
+                    pendingUri = copy!!.toUri()
+                    copy = null // Owned by the workspace until its next cleanup.
+                } else if (fallback != null) {
+                    pendingLink = fallback.toString()
+                } else {
+                    downloadError = "Przeglądarka przekazała podgląd lub dane, które nie są plikiem PDF. Pobierz PDF przyciskiem ze strzałką w przeglądarce, a następnie otwórz pobrany plik w AnonPDF."
+                }
+            } catch (e: CancellationException) { throw e }
+            catch (e: Exception) {
+                if (fallback != null) pendingLink = fallback.toString()
+                else downloadError = "Nie udało się odczytać udostępnionego pliku. Pobierz PDF w przeglądarce i otwórz go ponownie w AnonPDF."
+            } finally { copy?.delete() }
+        }
     }
 }
