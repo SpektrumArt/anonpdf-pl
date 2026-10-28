@@ -66,8 +66,8 @@ fun ResultCard(
         val single = result as? ToolResult.One ?: return@rememberLauncherForActivityResult
         scope.launch {
             runCatching { store.export(single.file, destination) }
-                .onSuccess { onMessage("Saved.") }
-                .onFailure { onMessage(it.friendlyMessage("Could not save the file.")) }
+                .onSuccess { onMessage("Zapisano.") }
+                .onFailure { onMessage(it.friendlyMessage("Nie udało się zapisać pliku.")) }
         }
     }
 
@@ -78,8 +78,8 @@ fun ResultCard(
         val single = result as? ToolResult.One ?: return@rememberLauncherForActivityResult
         scope.launch {
             runCatching { store.export(single.file, destination) }
-                .onSuccess { onMessage("Saved.") }
-                .onFailure { onMessage(it.friendlyMessage("Could not save the file.")) }
+                .onSuccess { onMessage("Zapisano.") }
+                .onFailure { onMessage(it.friendlyMessage("Nie udało się zapisać pliku.")) }
         }
     }
 
@@ -91,18 +91,18 @@ fun ResultCard(
         scope.launch {
             runCatching {
                 val tree = DocumentFile.fromTreeUri(context, treeUri)
-                    ?: error("That folder is not writable.")
+                    ?: error("Nie można zapisywać w tym folderze.")
                 withContext(Dispatchers.IO) {
                     many.files.forEach { file ->
                         val mime = mimeFor(file)
                         val created = tree.createFile(mime, file.name)
-                            ?: error("Could not create ${file.name}.")
+                            ?: error("Nie udało się utworzyć pliku ${file.name}.")
                         store.export(file, created.uri)
                     }
                 }
             }
-                .onSuccess { onMessage("Saved ${many.files.size} files.") }
-                .onFailure { onMessage(it.friendlyMessage("Could not save to that folder.")) }
+                .onSuccess { onMessage("Zapisano pliki: ${many.files.size}.") }
+                .onFailure { onMessage(it.friendlyMessage("Nie udało się zapisać w tym folderze.")) }
         }
     }
 
@@ -120,7 +120,7 @@ fun ResultCard(
                     modifier = Modifier.size(22.dp),
                 )
                 Spacer(Modifier.width(10.dp))
-                Text("Done", style = MaterialTheme.typography.titleMedium)
+                Text("Gotowe", style = MaterialTheme.typography.titleMedium)
             }
 
             result.note?.let { note ->
@@ -144,13 +144,13 @@ fun ResultCard(
                     ) {
                         Icon(Icons.Filled.Save, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Save as…")
+                        Text("Zapisz jako…")
                     }
                 }
 
                 is ToolResult.Many -> {
                     Text(
-                        "${result.files.size} files",
+                        "Liczba plików: ${result.files.size}",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(Modifier.height(8.dp))
@@ -160,7 +160,7 @@ fun ResultCard(
                     ) {
                         Icon(Icons.Filled.FolderOpen, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Save all to folder…")
+                        Text("Zapisz wszystko w folderze…")
                     }
                 }
             }
@@ -173,12 +173,12 @@ fun ResultCard(
                 ) {
                     Icon(Icons.Filled.Share, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Share")
+                    Text("Udostępnij")
                 }
                 OutlinedButton(
                     onClick = onStartOver,
                     modifier = Modifier.weight(1f),
-                ) { Text("Start over") }
+                ) { Text("Zacznij od nowa") }
             }
         }
     }
@@ -211,9 +211,9 @@ private fun shareResult(
             }
         }
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        context.startActivity(Intent.createChooser(intent, "Share"))
+        context.startActivity(Intent.createChooser(intent, "Udostępnij"))
     }.onFailure {
-        onMessage(it.friendlyMessage("Nothing on this device can receive that file."))
+        onMessage(it.friendlyMessage("Brak aplikacji, która może odebrać ten plik."))
     }
 }
 

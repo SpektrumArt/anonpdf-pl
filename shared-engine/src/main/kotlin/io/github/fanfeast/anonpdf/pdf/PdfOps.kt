@@ -93,7 +93,7 @@ object PdfOps {
         output: File,
         onProgress: Progress = {},
     ) = withContext(Dispatchers.IO) {
-        require(inputs.size >= 2) { "Pick at least two PDFs to merge." }
+        require(inputs.size >= 2) { "Wybierz co najmniej dwa pliki PDF do połączenia." }
         val merger = PDFMergerUtility()
         merger.destinationFileName = output.absolutePath
         inputs.forEachIndexed { index, file ->
@@ -117,7 +117,7 @@ object PdfOps {
         password: String? = null,
         onProgress: Progress = {},
     ) = withContext(Dispatchers.IO) {
-        require(plan.isNotEmpty()) { "A PDF needs at least one page." }
+        require(plan.isNotEmpty()) { "PDF musi zawierać co najmniej jedną stronę." }
         load(input, password).use { doc ->
             val originals = (0 until doc.numberOfPages).map { doc.getPage(it) }
             originals.forEach { pinInheritedAttributes(it) }
@@ -127,7 +127,7 @@ object PdfOps {
 
             plan.forEachIndexed { index, item ->
                 val page = originals.getOrNull(item.sourceIndex)
-                    ?: error("Page ${item.sourceIndex + 1} is not in this document.")
+                    ?: error("Dokument nie zawiera strony ${item.sourceIndex + 1}.")
                 page.rotation = normalizeRotation(page.rotation + item.rotationDelta)
                 doc.addPage(page)
                 onProgress((index + 1f) / plan.size)
@@ -175,13 +175,13 @@ object PdfOps {
         password: String? = null,
         onProgress: Progress = {},
     ): List<File> = withContext(Dispatchers.IO) {
-        require(ranges.isNotEmpty()) { "Describe at least one page range." }
+        require(ranges.isNotEmpty()) { "Podaj co najmniej jeden zakres stron." }
         outputDir.mkdirs()
         ranges.mapIndexed { index, range ->
             val target = File(outputDir, "${FileNames.sanitize(baseName)}-${index + 1}.pdf")
             load(input, password).use { doc ->
                 val keep = range.filter { it in 0 until doc.numberOfPages }
-                require(keep.isNotEmpty()) { "Range ${index + 1} does not cover any pages." }
+                require(keep.isNotEmpty()) { "Zakres ${index + 1} nie obejmuje żadnych stron." }
                 val originals = (0 until doc.numberOfPages).map { doc.getPage(it) }
                 originals.forEach { pinInheritedAttributes(it) }
                 originals.forEach { doc.pages.remove(it) }
@@ -222,11 +222,11 @@ object PdfOps {
         password: String? = null,
         onProgress: Progress = {},
     ) = withContext(Dispatchers.IO) {
-        require(options.text.isNotBlank()) { "Enter some watermark text." }
+        require(options.text.isNotBlank()) { "Wpisz tekst znaku wodnego." }
         load(input, password).use { doc ->
             val font = PdfDraw.watermarkFont(options)
             val text = PdfDraw.sanitizeForFont(options.text, font)
-            if (text.isBlank()) error("That text cannot be drawn with the built-in fonts.")
+            if (text.isBlank()) error("Wbudowane czcionki nie obsługują tego tekstu.")
 
             for (index in 0 until doc.numberOfPages) {
                 PdfDraw.watermarkPage(doc, doc.getPage(index), options, text, font)
@@ -292,7 +292,7 @@ object PdfOps {
         password: String? = null,
         onProgress: Progress = {},
     ) = withContext(Dispatchers.IO) {
-        require(stamps.isNotEmpty()) { "Nothing to place." }
+        require(stamps.isNotEmpty()) { "Brak elementów do umieszczenia." }
         load(input, password).use { doc ->
             stamps.forEachIndexed { index, stamp ->
                 val page = doc.getPage(stamp.pageIndex)
@@ -332,7 +332,7 @@ object PdfOps {
         password: String? = null,
         onProgress: Progress = {},
     ) = withContext(Dispatchers.IO) {
-        require(options.userPassword.isNotEmpty()) { "Choose a password." }
+        require(options.userPassword.isNotEmpty()) { "Ustaw hasło." }
         load(input, password).use { doc ->
             onProgress(0.3f)
             val permissions = AccessPermission().apply {
@@ -375,7 +375,7 @@ object PdfOps {
     ) = withContext(Dispatchers.IO) {
         load(input, password).use { doc ->
             onProgress(0.4f)
-            if (!doc.isEncrypted) error("This PDF is not password protected.")
+            if (!doc.isEncrypted) error("Ten PDF nie jest chroniony hasłem.")
             doc.isAllSecurityToBeRemoved = true
             onProgress(0.7f)
             doc.save(output)
@@ -398,7 +398,7 @@ object PdfOps {
     ): String = withContext(Dispatchers.IO) {
         load(input, password).use { doc ->
             if (doc.isEncrypted && !doc.currentAccessPermission.canExtractContent()) {
-                error("This PDF does not allow text extraction.")
+                error("Ten PDF nie zezwala na wyodrębnianie tekstu.")
             }
             val builder = StringBuilder()
             val stripper = PDFTextStripper().apply { sortByPosition = true }

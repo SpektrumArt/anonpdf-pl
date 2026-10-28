@@ -98,8 +98,8 @@ private const val PREVIEW_WIDTH_PX = 900
 
 /** Signature ink options. Deliberately short: black or blue, like a real pen. */
 private enum class InkColor(val label: String, val color: Color) {
-    BLACK("Black", Color(0xFF111111)),
-    BLUE("Blue", Color(0xFF12327A)),
+    BLACK("Czarny", Color(0xFF111111)),
+    BLUE("Niebieski", Color(0xFF12327A)),
 }
 
 @Composable
@@ -173,7 +173,7 @@ fun SignScreen(
         if (pdf != null) {
             load(pdf, null)
         } else {
-            scope.launch { snackbarHost.showSnackbar("Only a PDF can be signed.") }
+            scope.launch { snackbarHost.showSnackbar("Podpisać można tylko plik PDF.") }
         }
     }
 
@@ -196,7 +196,7 @@ fun SignScreen(
     }
 
     Scaffold(
-        topBar = { AnonTopBar(title = "Sign PDF", onBack = onBack) },
+        topBar = { AnonTopBar(title = "Podpisz PDF", onBack = onBack) },
         snackbarHost = { SnackbarHost(snackbarHost) },
     ) { padding ->
         Box(Modifier.fillMaxSize()) {
@@ -211,8 +211,8 @@ fun SignScreen(
 
                 if (current == null) {
                     Text(
-                        "Draw your signature and drop it onto a page. Everything " +
-                            "happens on this device.",
+                        "Narysuj podpis i umieść go na stronie. Wszystko " +
+                            "odbywa się na tym urządzeniu.",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(Modifier.height(20.dp))
@@ -222,13 +222,13 @@ fun SignScreen(
                     ) {
                         Icon(Icons.Filled.Description, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Choose a PDF")
+                        Text("Wybierz PDF")
                     }
                 } else {
                     Text(current.name, style = MaterialTheme.typography.titleMedium, maxLines = 1)
                     Spacer(Modifier.height(16.dp))
 
-                    SectionLabel("1. Draw your signature")
+                    SectionLabel("1. Narysuj podpis")
                     SignaturePad(
                         strokes = strokes,
                         activeStroke = activeStroke,
@@ -245,15 +245,15 @@ fun SignScreen(
                         OutlinedButton(
                             onClick = { strokes = strokes.dropLast(1) },
                             enabled = strokes.isNotEmpty(),
-                        ) { Text("Undo") }
+                        ) { Text("Cofnij") }
                         OutlinedButton(
                             onClick = { strokes = emptyList() },
                             enabled = strokes.isNotEmpty(),
-                        ) { Text("Clear") }
+                        ) { Text("Wyczyść") }
                     }
                     Spacer(Modifier.height(12.dp))
                     ChoiceChips(
-                        label = "Ink",
+                        label = "Tusz",
                         options = InkColor.entries,
                         selected = ink,
                         onSelect = { ink = it },
@@ -261,7 +261,7 @@ fun SignScreen(
                     )
 
                     Spacer(Modifier.height(24.dp))
-                    SectionLabel("2. Place it")
+                    SectionLabel("2. Umieść podpis")
 
                     if (current.pageCount > 1) {
                         PageChooser(
@@ -273,7 +273,7 @@ fun SignScreen(
                     }
 
                     Text(
-                        "Tap or click the page where you want your signature.",
+                        "Dotknij lub kliknij miejsce na stronie, w którym chcesz umieścić podpis.",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -296,11 +296,11 @@ fun SignScreen(
 
                     Spacer(Modifier.height(12.dp))
                     LabeledSlider(
-                        label = "Signature width",
+                        label = "Szerokość podpisu",
                         value = widthRatio,
                         onValueChange = { widthRatio = it },
                         valueRange = 0.08f..0.7f,
-                        valueLabel = "${(widthRatio * 100).roundToInt()}% of page",
+                        valueLabel = "${(widthRatio * 100).roundToInt()}% szerokości strony",
                     )
 
                     error?.let {
@@ -324,11 +324,11 @@ fun SignScreen(
                             onClick = {
                                 val bitmap = signatureBitmap
                                 if (bitmap == null) {
-                                    error = "Draw a signature first."
+                                    error = "Najpierw narysuj podpis."
                                     return@Button
                                 }
                                 scope.launch {
-                                    busyMessage = "Adding your signature…"
+                                    busyMessage = "Dodawanie podpisu…"
                                     progress = 0f
                                     error = null
                                     try {
@@ -351,12 +351,12 @@ fun SignScreen(
                                         result = ToolResult.One(
                                             file = output,
                                             suggestedName = "$stem-signed.pdf",
-                                            note = "Signature placed on page ${pageIndex + 1}.",
+                                            note = "Umieszczono podpis na stronie ${pageIndex + 1}.",
                                         )
                                     } catch (e: CancellationException) {
                                         throw e
                                     } catch (t: Throwable) {
-                                        error = t.friendlyMessage("Could not sign the document.")
+                                        error = t.friendlyMessage("Nie udało się podpisać dokumentu.")
                                     } finally {
                                         busyMessage = null
                                     }
@@ -364,14 +364,14 @@ fun SignScreen(
                             },
                             enabled = busyMessage == null && strokes.isNotEmpty(),
                             modifier = Modifier.fillMaxWidth(),
-                        ) { Text("Sign and save") }
+                        ) { Text("Podpisz i zapisz") }
                     }
 
                     Spacer(Modifier.height(16.dp))
                     InfoNote(
-                        "This stamps a picture of your signature onto the page. It is " +
-                            "not a cryptographic digital signature, so it proves no more " +
-                            "than ink on paper does.",
+                        "Na stronie zostanie umieszczony obraz podpisu. " +
+                            "Nie jest to kryptograficzny podpis cyfrowy; ma podobny charakter " +
+                            "jak podpis na papierze.",
                     )
                 }
 
@@ -419,7 +419,7 @@ private fun SignaturePad(
             .height(180.dp)
             .background(Color.White, RoundedCornerShape(12.dp))
             .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
-            .semantics { contentDescription = "Signature pad" }
+            .semantics { contentDescription = "Pole podpisu" }
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { offset -> onStrokeStart(offset.inPadUnits(size)) },
@@ -474,7 +474,7 @@ private fun SignaturePad(
 @Composable
 private fun PageChooser(pageCount: Int, selected: Int, onSelect: (Int) -> Unit) {
     ChoiceChips(
-        label = "Page",
+        label = "Strona",
         options = (0 until pageCount).toList(),
         selected = selected,
         onSelect = onSelect,
@@ -514,7 +514,7 @@ private fun PagePlacement(
         if (previewImage != null) {
             Image(
                 bitmap = previewImage,
-                contentDescription = "Page preview",
+                contentDescription = "Podgląd strony",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize(),
             )
@@ -530,7 +530,7 @@ private fun PagePlacement(
                 signatureWidth * (signature.height / signature.width.toFloat())
             Image(
                 bitmap = signature,
-                contentDescription = "Signature",
+                contentDescription = "Podpis",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .offset(

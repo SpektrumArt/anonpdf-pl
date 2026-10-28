@@ -126,7 +126,7 @@ fun ViewerScreen(
     val store = remember { DocumentStore(context) }
     val preferences = remember { AppPreferences(context) }
 
-    var title by remember { mutableStateOf("Loading…") }
+    var title by remember { mutableStateOf("Wczytywanie…") }
     var opened by remember { mutableStateOf<OpenedDocument?>(null) }
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
@@ -224,12 +224,12 @@ fun ViewerScreen(
             preferences.addRecent(uri, name)
             askPassword = false
         } catch (t: PdfWrongPasswordException) {
-            passwordError = "That password did not work."
+            passwordError = "Nieprawidłowe hasło."
             askPassword = true
         } catch (e: CancellationException) {
             throw e
         } catch (t: Throwable) {
-            error = t.friendlyMessage("This file could not be opened as a PDF.")
+            error = t.friendlyMessage("Nie udało się otworzyć tego pliku jako PDF.")
         } finally {
             loading = false
         }
@@ -247,19 +247,19 @@ fun ViewerScreen(
         topBar = {
             AnonTopBar(title = title, onBack = onBack) {
                 IconButton(onClick = { searchOpen = true }, enabled = document != null) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search text")
+                    Icon(Icons.Filled.Search, contentDescription = "Szukaj tekstu")
                 }
                 // One entry point for everything: the editor holds every tool,
                 // including the whole-file ones. A second "tools" menu here would
                 // just be the same list reached a different way.
                 IconButton(onClick = onEdit, enabled = document != null) {
-                    Icon(Icons.Filled.Edit, contentDescription = "Edit")
+                    Icon(Icons.Filled.Edit, contentDescription = "Edytuj")
                 }
                 IconButton(onClick = {
                     invert = !invert
                     scope.launch { preferences.setInvertPdfColors(invert) }
                 }) {
-                    Icon(Icons.Filled.Contrast, contentDescription = "Invert colours")
+                    Icon(Icons.Filled.Contrast, contentDescription = "Odwróć kolory")
                 }
             }
         },
@@ -429,7 +429,7 @@ private fun PdfPage(
         if (current != null) {
             Image(
                 bitmap = current.asImageBitmap(),
-                contentDescription = "Page ${index + 1}",
+                contentDescription = "Strona ${index + 1}",
                 contentScale = ContentScale.FillBounds,
                 colorFilter = if (invert) {
                     ColorFilter.colorMatrix(ColorMatrix(INVERT_MATRIX))
@@ -460,13 +460,13 @@ private fun JumpToPageDialog(
     val page = text.toIntOrNull()
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Go to page") },
+        title = { Text("Przejdź do strony") },
         text = {
             OutlinedTextField(
                 value = text,
                 onValueChange = { text = it.filter(Char::isDigit).take(6) },
-                label = { Text("Page number") },
-                supportingText = { Text("1 to $pageCount") },
+                label = { Text("Numer strony") },
+                supportingText = { Text("Od 1 do $pageCount") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -478,9 +478,9 @@ private fun JumpToPageDialog(
             TextButton(
                 onClick = { page?.let { onJump(it - 1) } },
                 enabled = page != null && page in 1..pageCount,
-            ) { Text("Go") }
+            ) { Text("Przejdź") }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Anuluj") } },
     )
 }
 
@@ -502,13 +502,13 @@ private fun SearchDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Search text") },
+        title = { Text("Szukaj tekstu") },
         text = {
             Column {
                 OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
-                    label = { Text("Find") },
+                    label = { Text("Znajdź") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -517,7 +517,7 @@ private fun SearchDialog(
                     searching -> Row(verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(Modifier.height(18.dp).width(18.dp))
                         Spacer(Modifier.width(12.dp))
-                        Text("Reading the document…")
+                        Text("Odczytywanie dokumentu…")
                     }
 
                     message != null -> Text(
@@ -528,7 +528,7 @@ private fun SearchDialog(
                     hits != null -> {
                         val found = hits!!
                         if (found.isEmpty()) {
-                            Text("No matches.", style = MaterialTheme.typography.bodyMedium)
+                            Text("Brak wyników.", style = MaterialTheme.typography.bodyMedium)
                         } else {
                             LazyColumn(Modifier.height(240.dp)) {
                                 items(found.size) { index ->
@@ -539,7 +539,7 @@ private fun SearchDialog(
                                     ) {
                                         Column(Modifier.fillMaxWidth()) {
                                             Text(
-                                                "Page ${hit.pageIndex + 1}",
+                                                "Strona ${hit.pageIndex + 1}",
                                                 style = MaterialTheme.typography.labelMedium,
                                             )
                                             Text(
@@ -569,16 +569,16 @@ private fun SearchDialog(
                         } catch (e: CancellationException) {
                             throw e
                         } catch (t: Throwable) {
-                            message = t.friendlyMessage("Could not read the text.")
+                            message = t.friendlyMessage("Nie udało się odczytać tekstu.")
                         } finally {
                             searching = false
                         }
                     }
                 },
                 enabled = query.isNotBlank() && !searching,
-            ) { Text("Search") }
+            ) { Text("Szukaj") }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Close") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Zamknij") } },
     )
 }
 

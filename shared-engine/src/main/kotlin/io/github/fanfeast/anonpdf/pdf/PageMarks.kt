@@ -62,7 +62,7 @@ data class TextMark(
 ) : PageMark {
     override fun describe(): String {
         val snippet = text.lineSequence().firstOrNull()?.take(24).orEmpty()
-        return "Text \"$snippet\" · page ${sourceIndex + 1}"
+        return "Tekst „$snippet” · strona ${sourceIndex + 1}"
     }
 }
 
@@ -83,7 +83,7 @@ data class FillMark(
     val isHighlight: Boolean get() = opacity < 1f
 
     override fun describe() =
-        (if (isHighlight) "Highlight" else "White-out") + " · page ${sourceIndex + 1}"
+        (if (isHighlight) "Podświetl" else "Zakryj") + " · strona ${sourceIndex + 1}"
 }
 
 /** Freehand ink. Points are page fractions, so strokes survive a resize. */
@@ -96,6 +96,6 @@ data class InkMark(
     val widthRatio: Float = 0.004f,
 ) : PageMark {
     override fun describe() =
-        "Drawing (${strokes.size} stroke${if (strokes.size == 1) "" else "s"}) · " +
-            "page ${sourceIndex + 1}"
+        "Rysunek (liczba kresek: ${strokes.size}) · " +
+            "strona ${sourceIndex + 1}"
 }

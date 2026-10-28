@@ -367,13 +367,13 @@ fun EditorScreen(
         }
         when {
             dropped.pdfs.isEmpty() -> if (session == null) {
-                error = "Only PDFs can be opened here."
+                error = "Można tu otwierać tylko pliki PDF."
             } else {
-                tell("Only PDFs can be added here.")
+                tell("Można tu dodawać tylko pliki PDF.")
             }
             session == null -> if (!loading) load(dropped.pdfs.first(), null)
             mode != EditorMode.Normal || busyMessage != null || insertQueue.isNotEmpty() ->
-                tell("Finish what you're doing first, then drop the file again.")
+                tell("Najpierw zakończ bieżącą czynność, potem ponownie upuść plik.")
             else -> {
                 insertQueue = dropped.pdfs
                 processInsertQueue()
@@ -520,7 +520,7 @@ fun EditorScreen(
                 openTool(tool, document.uri)
                 return@launch
             }
-            busyMessage = "Applying your edits first…"
+            busyMessage = "Stosowanie dotychczasowych zmian…"
             progress = 0f
             val staged = try {
                 store.newOutputFile(
@@ -536,7 +536,7 @@ fun EditorScreen(
             } catch (e: CancellationException) {
                 throw e
             } catch (t: Throwable) {
-                error = t.friendlyMessage("Could not prepare the document.")
+                error = t.friendlyMessage("Nie udało się przygotować dokumentu.")
                 null
             } finally {
                 busyMessage = null
@@ -643,7 +643,7 @@ fun EditorScreen(
 
     fun save() {
         scope.launch {
-            busyMessage = "Writing the document…"
+            busyMessage = "Zapisywanie dokumentu…"
             progress = 0f
             error = null
             try {
@@ -657,15 +657,12 @@ fun EditorScreen(
                 result = ToolResult.One(
                     file = output,
                     suggestedName = "$stem-edited.pdf",
-                    note = "${plan.kept.size} page" +
-                        (if (plan.kept.size == 1) "" else "s") +
-                        ", ${state.ops.size} edit" +
-                        (if (state.ops.size == 1) "" else "s") + " applied.",
+                    note = "Liczba stron: ${plan.kept.size}. Zastosowane zmiany: ${state.ops.size}.",
                 )
             } catch (e: CancellationException) {
                 throw e
             } catch (t: Throwable) {
-                error = t.friendlyMessage("Could not save the document.")
+                error = t.friendlyMessage("Nie udało się zapisać dokumentu.")
             } finally {
                 busyMessage = null
             }
@@ -710,10 +707,10 @@ fun EditorScreen(
         topBar = {
             AnonTopBar(title = document.name, onBack = onBack) {
                 IconButton(onClick = { state.undo() }, enabled = state.canUndo) {
-                    Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = "Undo")
+                    Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = "Cofnij")
                 }
                 IconButton(onClick = { state.redo() }, enabled = state.canRedo) {
-                    Icon(Icons.AutoMirrored.Filled.Redo, contentDescription = "Redo")
+                    Icon(Icons.AutoMirrored.Filled.Redo, contentDescription = "Ponów")
                 }
                 IconButton(
                     onClick = {
@@ -722,7 +719,7 @@ fun EditorScreen(
                         mode = EditorMode.Normal
                     },
                     enabled = state.canUndo,
-                ) { Icon(Icons.Filled.Restore, contentDescription = "Revert all") }
+                ) { Icon(Icons.Filled.Restore, contentDescription = "Cofnij wszystkie zmiany") }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHost) },
@@ -889,8 +886,8 @@ fun EditorScreen(
 
     if (insertNeedsPassword) {
         PasswordDialog(
-            message = "A PDF you picked is protected. Enter its password to merge it, " +
-                "or cancel to skip that file.",
+            message = "Wybrany PDF jest zabezpieczony. Wpisz hasło, aby go połączyć, " +
+                "lub anuluj, aby pominąć ten plik.",
             error = insertPasswordError,
             onDismiss = {
                 insertNeedsPassword = false
@@ -1003,7 +1000,7 @@ internal fun PreviewArea(
 
             when {
                 empty -> Text(
-                    "Every page is deleted.\nRestore one to carry on.",
+                    "Usunięto wszystkie strony.\nPrzywróć jedną, aby kontynuować.",
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                 )
@@ -1020,7 +1017,7 @@ internal fun PreviewArea(
                 ) {
                     Image(
                         bitmap = bitmap.toImageBitmap(),
-                        contentDescription = "Page preview",
+                        contentDescription = "Podgląd strony",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .fillMaxSize()
@@ -1089,19 +1086,19 @@ internal fun PreviewArea(
                 IconButton(
                     onClick = { zoom = ZOOM_STEPS.lastOrNull { it < zoom - 0.01f } ?: 1f },
                     enabled = zoom > 1f,
-                ) { Icon(Icons.Filled.ZoomOut, contentDescription = "Zoom out") }
+                ) { Icon(Icons.Filled.ZoomOut, contentDescription = "Pomniejsz") }
                 TextButton(onClick = { zoom = 1f; pan = Offset.Zero }) {
                     Text("${(zoom * 100).roundToInt()}%")
                 }
                 IconButton(
                     onClick = { zoom = ZOOM_STEPS.firstOrNull { it > zoom + 0.01f } ?: MAX_ZOOM },
                     enabled = zoom < MAX_ZOOM,
-                ) { Icon(Icons.Filled.ZoomIn, contentDescription = "Zoom in") }
+                ) { Icon(Icons.Filled.ZoomIn, contentDescription = "Powiększ") }
                 if (mode.interactsWithPage) {
                     FilterChip(
                         selected = moving,
                         onClick = { moving = !moving },
-                        label = { Text(if (moving) "Resume editing" else "Move page") },
+                        label = { Text(if (moving) "Wznów edycję" else "Przesuń stronę") },
                     )
                 }
             }
@@ -1211,12 +1208,12 @@ private fun PageStepper(position: Int, total: Int, onStep: (Int) -> Unit) {
         IconButton(onClick = { onStep(-1) }, enabled = position > 0) {
             Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                contentDescription = "Previous page",
+                contentDescription = "Poprzednia strona",
             )
         }
         Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surface) {
             Text(
-                "page ${position + 1} / $total",
+                "strona ${position + 1} / $total",
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
             )
@@ -1224,7 +1221,7 @@ private fun PageStepper(position: Int, total: Int, onStep: (Int) -> Unit) {
         IconButton(onClick = { onStep(1) }, enabled = position < total - 1) {
             Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = "Next page",
+                contentDescription = "Następna strona",
             )
         }
     }
@@ -1309,7 +1306,7 @@ private fun DrawerBody(
                     )
                 }
             }
-            // Pinned, so "Save as…" is reachable however far the drawer is pulled down.
+            // Pinned, so "Zapisz jako…" is reachable however far the drawer is pulled down.
             SaveRow(state, plan, onShowPending, onSave)
         }
 
@@ -1497,9 +1494,9 @@ private fun ScopeRow(state: EditorState) {
         }
         if (state.scope == ApplyScope.SELECTION) {
             if (state.selection.isEmpty()) {
-                TextButton(onClick = { state.selectAll() }) { Text("All") }
+                TextButton(onClick = { state.selectAll() }) { Text("Wszystkie") }
             } else {
-                TextButton(onClick = { state.clearSelection() }) { Text("None") }
+                TextButton(onClick = { state.clearSelection() }) { Text("Brak") }
             }
         }
     }
@@ -1521,9 +1518,9 @@ private fun SaveRow(
             label = {
                 Text(
                     if (state.ops.isEmpty()) {
-                        "No edits yet"
+                        "Brak zmian"
                     } else {
-                        "${state.ops.size} edit${if (state.ops.size == 1) "" else "s"}"
+                        "Liczba zmian: ${state.ops.size}"
                     },
                 )
             },
@@ -1533,7 +1530,7 @@ private fun SaveRow(
             onClick = onSave,
             enabled = plan.hasChanges && plan.kept.isNotEmpty(),
             modifier = Modifier.weight(1f),
-        ) { Text("Save as…") }
+        ) { Text("Zapisz jako…") }
     }
 }
 
@@ -1585,7 +1582,7 @@ private fun effectiveSize(base: SizeF, state: PageState): SizeF {
 private fun describeResult(size: SizeF?): String = if (size == null) {
     ""
 } else {
-    "Result: ${size.width.roundToInt()} × ${size.height.roundToInt()} pt"
+    "Wynik: ${size.width.roundToInt()} × ${size.height.roundToInt()} pt"
 }
 
 @Composable
@@ -1595,7 +1592,7 @@ private fun EmptyEditor(
     onPick: () -> Unit,
     onBack: () -> Unit,
 ) {
-    Scaffold(topBar = { AnonTopBar(title = "Edit PDF", onBack = onBack) }) { padding ->
+    Scaffold(topBar = { AnonTopBar(title = "Edytuj PDF", onBack = onBack) }) { padding ->
         Column(
             Modifier
                 .padding(padding)
@@ -1603,16 +1600,16 @@ private fun EmptyEditor(
                 .padding(16.dp),
         ) {
             Text(
-                "Rotate, crop, resize, delete and reorder pages, add text, white-out, " +
-                    "highlights or drawings, and reach every other tool from here — all " +
-                    "with a preview of the real result. Nothing is written until you save.",
+                "Obracaj, przycinaj, skaluj, usuwaj i przestawiaj strony. Dodawaj tekst, zakrywaj treść, " +
+                    "podświetlaj i rysuj. Tutaj znajdziesz wszystkie narzędzia — " +
+                    "z podglądem wyniku. Zmiany są zapisywane dopiero po wybraniu zapisu.",
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(Modifier.height(20.dp))
             OutlinedButton(onClick = onPick, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Filled.Description, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text("Choose a PDF")
+                Text("Wybierz PDF")
             }
             error?.let {
                 Spacer(Modifier.height(16.dp))
@@ -1790,9 +1787,9 @@ private fun PageStrip(
         }
         Text(
             if (selecting) {
-                "Tap to select. Press and hold, then drag to reorder."
+                "Dotknij, aby zaznaczyć. Przytrzymaj i przeciągnij, aby zmienić kolejność."
             } else {
-                "Press and hold a page, then drag it to reorder."
+                "Przytrzymaj stronę i przeciągnij, aby zmienić kolejność."
             },
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -1850,7 +1847,7 @@ private fun Thumbnail(
             bitmap?.let {
                 Image(
                     bitmap = it.toImageBitmap(),
-                    contentDescription = position?.let { "Page $it" } ?: "Deleted page",
+                    contentDescription = position?.let { "Strona $it" } ?: "Usunięta strona",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxSize()
@@ -1860,7 +1857,7 @@ private fun Thumbnail(
             if (page.deleted) {
                 Icon(
                     Icons.Filled.Delete,
-                    contentDescription = "Deleted",
+                    contentDescription = "Usunięto",
                     tint = MaterialTheme.colorScheme.error,
                     modifier = Modifier.size(16.dp),
                 )

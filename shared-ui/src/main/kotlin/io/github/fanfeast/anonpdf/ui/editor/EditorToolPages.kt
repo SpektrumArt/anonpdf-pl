@@ -56,32 +56,32 @@ import androidx.compose.ui.unit.dp
  * changing the pending plan; a platform without those screens leaves them out.
  */
 enum class EditorTool(val label: String, val icon: ImageVector, val handsOff: Boolean = false) {
-    ROTATE_LEFT("Left", Icons.AutoMirrored.Filled.RotateLeft),
-    ROTATE_RIGHT("Right", Icons.AutoMirrored.Filled.RotateRight),
-    CROP("Crop", Icons.Filled.Crop),
-    RESIZE("Resize", Icons.Filled.ZoomOutMap),
-    DELETE("Delete", Icons.Filled.Delete),
-    RESTORE("Restore", Icons.Filled.RestoreFromTrash),
-    REVERSE("Reverse", Icons.Filled.SwapVert),
+    ROTATE_LEFT("W lewo", Icons.AutoMirrored.Filled.RotateLeft),
+    ROTATE_RIGHT("W prawo", Icons.AutoMirrored.Filled.RotateRight),
+    CROP("Przytnij", Icons.Filled.Crop),
+    RESIZE("Zmień rozmiar", Icons.Filled.ZoomOutMap),
+    DELETE("Usuń", Icons.Filled.Delete),
+    RESTORE("Przywróć", Icons.Filled.RestoreFromTrash),
+    REVERSE("Odwróć kolejność", Icons.Filled.SwapVert),
 
-    TEXT("Text", Icons.Filled.TextFields),
-    WHITEOUT("White-out", Icons.Filled.FormatColorFill),
-    HIGHLIGHT("Highlight", Icons.Filled.Highlight),
-    DRAW("Draw", Icons.Filled.Brush),
-    WATERMARK("Watermark", Icons.Filled.WaterDrop),
-    PAGE_NUMBERS("Numbers", Icons.Filled.Numbers),
+    TEXT("Tekst", Icons.Filled.TextFields),
+    WHITEOUT("Zakryj", Icons.Filled.FormatColorFill),
+    HIGHLIGHT("Podświetl", Icons.Filled.Highlight),
+    DRAW("Rysuj", Icons.Filled.Brush),
+    WATERMARK("Znak wodny", Icons.Filled.WaterDrop),
+    PAGE_NUMBERS("Numeracja", Icons.Filled.Numbers),
 
-    MERGE("Merge", Icons.AutoMirrored.Filled.MergeType),
-    SPLIT("Split", Icons.Filled.ContentCut, handsOff = true),
-    EXTRACT("Extract", Icons.Filled.FilterNone, handsOff = true),
-    COMPRESS("Compress", Icons.Filled.Compress, handsOff = true),
+    MERGE("Połącz", Icons.AutoMirrored.Filled.MergeType),
+    SPLIT("Podziel", Icons.Filled.ContentCut, handsOff = true),
+    EXTRACT("Wyodrębnij", Icons.Filled.FilterNone, handsOff = true),
+    COMPRESS("Kompresuj", Icons.Filled.Compress, handsOff = true),
 
-    TO_IMAGES("To images", Icons.Filled.Image, handsOff = true),
-    FROM_IMAGES("From images", Icons.Filled.PictureAsPdf, handsOff = true),
-    EXTRACT_TEXT("Get text", Icons.AutoMirrored.Filled.Article, handsOff = true),
-    SIGN("Sign", Icons.Filled.Draw, handsOff = true),
-    PROTECT("Protect", Icons.Filled.Lock, handsOff = true),
-    UNLOCK("Unlock", Icons.Filled.LockOpen, handsOff = true),
+    TO_IMAGES("Na obrazy", Icons.Filled.Image, handsOff = true),
+    FROM_IMAGES("Z obrazów", Icons.Filled.PictureAsPdf, handsOff = true),
+    EXTRACT_TEXT("Wyodrębnij tekst", Icons.AutoMirrored.Filled.Article, handsOff = true),
+    SIGN("Podpisz", Icons.Filled.Draw, handsOff = true),
+    PROTECT("Zabezpiecz", Icons.Filled.Lock, handsOff = true),
+    UNLOCK("Odblokuj", Icons.Filled.LockOpen, handsOff = true),
 }
 
 /**
@@ -106,7 +106,7 @@ fun toolPages(
 
 private fun allToolPages(currentPageDeleted: Boolean): List<ToolPage> = listOf(
     ToolPage(
-        "Pages",
+        "Strony",
         listOf(
             EditorTool.ROTATE_LEFT,
             EditorTool.ROTATE_RIGHT,
@@ -117,7 +117,7 @@ private fun allToolPages(currentPageDeleted: Boolean): List<ToolPage> = listOf(
         ),
     ),
     ToolPage(
-        "Content",
+        "Zawartość",
         listOf(
             EditorTool.TEXT,
             EditorTool.WHITEOUT,
@@ -128,7 +128,7 @@ private fun allToolPages(currentPageDeleted: Boolean): List<ToolPage> = listOf(
         ),
     ),
     ToolPage(
-        "Whole file",
+        "Cały plik",
         listOf(
             EditorTool.MERGE,
             EditorTool.SPLIT,
@@ -137,7 +137,7 @@ private fun allToolPages(currentPageDeleted: Boolean): List<ToolPage> = listOf(
         ),
     ),
     ToolPage(
-        "Convert & lock",
+        "Konwersja i ochrona",
         listOf(
             EditorTool.TO_IMAGES,
             EditorTool.FROM_IMAGES,
