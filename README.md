@@ -1,184 +1,138 @@
 # AnonPDF
 
-[![Build](https://github.com/FanFeast/anonpdf/actions/workflows/build.yml/badge.svg)](https://github.com/FanFeast/anonpdf/actions/workflows/build.yml)
-[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
-[![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84.svg)](#requirements)
-[![No network permission](https://img.shields.io/badge/network-none-success.svg)](#the-guarantee-and-how-to-check-it)
+[![Kompilacja](https://github.com/FanFeast/anonpdf/actions/workflows/build.yml/badge.svg)](https://github.com/FanFeast/anonpdf/actions/workflows/build.yml)
+[![Licencja: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+[![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84.svg)](#wymagania)
+[![Bez dostępu do sieci](https://img.shields.io/badge/network-none-success.svg)](#gwarancja-prywatności-i-jak-ją-sprawdzić)
 
-A PDF reader and editor for Android that does its work on your device and nowhere else.
+Czytnik i edytor PDF na Androida, który przetwarza dokumenty wyłącznie na Twoim urządzeniu.
 
-**No ads. No accounts. No tracking. No paid tier. No network permission.**
+**Bez reklam. Bez kont. Bez śledzenia. Bez płatnej wersji. Bez uprawnienia do internetu.**
 
-AnonPDF exists because every other PDF app on the Play Store seems to want a
-subscription, a cloud account, and a look at your documents. This one wants none
-of those. It cannot upload your files, because it has no permission to reach the
-network — that is not a promise in a privacy policy, it is a fact enforced by the
-operating system.
+AnonPDF powstał, ponieważ niemal każda inna aplikacja PDF w Google Play wydaje się wymagać subskrypcji, konta w chmurze i dostępu do Twoich dokumentów. Ta nie potrzebuje żadnej z tych rzeczy. Nie może wysyłać Twoich plików, ponieważ nie ma uprawnienia do korzystania z sieci. To nie obietnica w polityce prywatności, lecz ograniczenie egzekwowane przez system operacyjny.
 
-| Library | Reading | Your files |
+| Biblioteka | Czytanie | Twoje pliki |
 |---|---|---|
-| ![Home](docs/screenshots/home.png) | ![Viewer](docs/screenshots/viewer.png) | ![Browse](docs/screenshots/browse.png) |
+| ![Ekran główny](docs/screenshots/home.png) | ![Czytnik](docs/screenshots/viewer.png) | ![Przeglądanie plików](docs/screenshots/browse.png) |
 
-## The editor
+## Edytor
 
-Most of the work happens here. Pick pages, stack up as many changes as you like,
-watch the real rendered output update as you go, and write the file once at the
-end. Nothing touches disk until you save, and the original is never modified.
+Tutaj wykonasz większość pracy. Wybierz strony, wprowadź dowolną liczbę zmian, obserwuj aktualizowany podgląd rzeczywistego wyniku, a na koniec zapisz plik. Zmiany nie są zapisywane do dokumentu przed wybraniem zapisu, a oryginał nigdy nie jest modyfikowany.
 
-| Editing | Drag to reorder | Fold the tools away |
+| Edycja | Przeciąganie zmienia kolejność | Zwijanie narzędzi |
 |---|---|---|
-| ![Editor](docs/screenshots/editor.png) | ![Reorder](docs/screenshots/editor-reorder.png) | ![Collapsed](docs/screenshots/editor-collapsed.png) |
+| ![Edytor](docs/screenshots/editor.png) | ![Zmiana kolejności](docs/screenshots/editor-reorder.png) | ![Zwinięty panel](docs/screenshots/editor-collapsed.png) |
 
-| Cover it and retype it | Highlight and draw | Merge in, then keep editing |
+| Zakryj treść i wpisz nową | Podświetlaj i rysuj | Połącz i edytuj dalej |
 |---|---|---|
-| ![Add text](docs/screenshots/editor-text.png) | ![Draw](docs/screenshots/editor-draw.png) | ![Merge](docs/screenshots/editor-merge.png) |
+| ![Dodawanie tekstu](docs/screenshots/editor-text.png) | ![Rysowanie](docs/screenshots/editor-draw.png) | ![Łączenie](docs/screenshots/editor-merge.png) |
 
-| Visual crop | Fit onto A4, Letter, … | Watermark |
+| Przycinanie z podglądem | Dopasowanie do A4, Letter i innych formatów | Znak wodny |
 |---|---|---|
-| ![Crop](docs/screenshots/editor-crop.png) | ![Paper size](docs/screenshots/editor-paper.png) | ![Watermark](docs/screenshots/editor-watermark.png) |
+| ![Przycinanie](docs/screenshots/editor-crop.png) | ![Format papieru](docs/screenshots/editor-paper.png) | ![Znak wodny](docs/screenshots/editor-watermark.png) |
 
-Rotate, crop, resize, delete, restore, reverse, add text, white-out, highlights,
-drawings, a watermark and page numbers — each applied to **this page**, a
-**selection**, or **all pages**. Undo and redo the whole history.
+Obracaj, przycinaj, skaluj, usuwaj i przywracaj strony, odwracaj ich kolejność, dodawaj tekst, zakrywaj treść, podświetlaj, rysuj oraz dodawaj znak wodny i numery stron. Każdą operację możesz zastosować do **tej strony**, **zaznaczonych stron** lub **wszystkich stron**. Całą historię zmian można cofać i ponawiać.
 
-- **Every tool lives here**, on four swipeable pages: *Pages*, *Content*,
-  *Whole file*, *Convert & lock*. The whole-file ones receive the document with
-  your pending edits already applied, so "delete three pages, then compress"
-  means what it looks like it means.
-- **Merge inserts, right where you say.** Pick another PDF (or several) and its
-  pages drop into the document — after the current page, at the start, or at
-  the end — as ordinary pages in the strip. Reorder, rotate, crop, mark or
-  delete them like any other, then save once. No separate merge screen, no
-  merge-then-reopen round trip.
-- **The tool area is a drawer.** Drag its handle up for more room, or tap it to
-  fold everything away and read the page full-height.
-- **Edit the content, not just the pages.** Cover something with a white-out
-  block and type your own text on top, highlight a passage, or draw on the page
-  freehand. (A PDF's existing text cannot be rewritten in place without the
-  document's own embedded fonts — cover-and-retype is the honest way to change
-  it, and it is what the app does.) A white-out genuinely removes what it
-  covers: the page is flattened into an image under the box, so the hidden text
-  cannot be copied, searched or extracted afterwards. The trade-off is that the
-  rest of that page's text stops being selectable too.
-- **Reorder by dragging.** Long-press a thumbnail and drag it; a gap opens where
-  it will land, and the strip auto-scrolls when you reach an edge.
-- **Multi-select by tapping.** Switch the scope to *Selected* and plain taps
-  toggle pages, so picking several is one tap each.
-- **Options open in place**, under the preview rather than over it, so you can
-  drag a slider and watch the page change.
-- **Size changes are shown, not re-fitted.** The preview is fitted to the page
-  as it arrived, so scaling to 50% draws it half as wide instead of quietly
-  filling the screen again.
+- **Wszystkie narzędzia są w jednym miejscu**, na czterech przesuwanych kartach: *Strony*, *Zawartość*, *Cały plik* oraz *Konwersja i ochrona*. Narzędzia działające na całym pliku otrzymują dokument z już zastosowanymi oczekującymi zmianami. Polecenie „usuń trzy strony, a potem skompresuj” daje więc dokładnie taki wynik, jakiego oczekujesz.
+- **Łączenie wstawia strony we wskazanym miejscu.** Wybierz jeden lub kilka innych plików PDF. Ich strony zostaną wstawione za bieżącą stroną, na początku albo na końcu dokumentu jako zwykłe strony na pasku miniatur. Zmieniaj ich kolejność, obracaj, przycinaj, oznaczaj lub usuwaj, a potem zapisz wszystko jednym razem. Nie trzeba przechodzić do osobnego ekranu łączenia ani ponownie otwierać wyniku.
+- **Panel narzędzi można wysuwać i zwijać.** Przeciągnij uchwyt w górę, aby go powiększyć, albo dotknij go, aby schować narzędzia i czytać stronę na pełnej wysokości.
+- **Edytuj także zawartość stron.** Zakryj fragment i wpisz własny tekst na wierzchu, podświetl akapit lub narysuj coś odręcznie. Istniejącego tekstu PDF nie można przepisać bezpośrednio bez osadzonych czcionek dokumentu — aplikacja zmienia go przez zakrycie i wpisanie nowego. Zakrywanie rzeczywiście usuwa treść pod zaznaczonym obszarem: strona zostaje spłaszczona do obrazu, więc ukrytego tekstu nie można później kopiować, wyszukiwać ani wyodrębniać. Oznacza to jednak, że pozostały tekst na tej stronie również przestaje być możliwy do zaznaczenia.
+- **Zmieniaj kolejność przez przeciąganie.** Przytrzymaj miniaturę i przeciągnij ją. W miejscu wstawienia pojawi się przerwa, a pasek przewinie się automatycznie po dotarciu do krawędzi.
+- **Zaznaczaj wiele stron dotknięciami.** Wybierz zakres *Zaznaczone*. Każde dotknięcie zaznacza lub odznacza stronę.
+- **Opcje pojawiają się pod podglądem**, zamiast go zasłaniać. Możesz przesuwać suwak i obserwować zmiany na stronie.
+- **Podgląd pokazuje zmianę rozmiaru bez ponownego dopasowania.** Jego skala odnosi się do pierwotnego rozmiaru strony. Skalowanie do 50% zmniejszy więc jej szerokość o połowę, zamiast ponownie wypełnić ekran.
 
-The preview is not an approximation. It is built by the same code that writes the
-final file, and a test renders both and asserts they match pixel for pixel.
+Podgląd nie jest przybliżeniem. Tworzy go ten sam kod, który zapisuje plik wynikowy. Test renderuje oba wyniki i sprawdza ich zgodność piksel po pikselu.
 
-## The guarantee, and how to check it
+## Gwarancja prywatności i jak ją sprawdzić
 
-AnonPDF declares exactly **one** permission:
+AnonPDF deklaruje dokładnie **jedno** uprawnienie:
 
 ```
 android.permission.MANAGE_EXTERNAL_STORAGE
 ```
 
-That is what lets the built-in browser list the PDFs on your device instead of
-making you walk the system file picker every time. It is **optional** — decline
-it and everything still works through the picker, which needs no permission at
-all.
+Pozwala ono wbudowanej przeglądarce wyświetlać pliki PDF na urządzeniu bez każdorazowego korzystania z systemowego okna wyboru. Jest **opcjonalne** — po odmowie nadal można używać wszystkich funkcji przez systemowe okno wyboru, które nie wymaga tego uprawnienia.
 
-Being straight about one thing: all-files access is a *special app access*, a
-toggle under Settings → Apps → Special app access → All files access. It does
-**not** appear on the app's normal "Permissions" page, which will read "No
-permissions requested" even when it is granted. So do not take that screen as
-proof of anything either way.
+Dostęp do wszystkich plików należy do *specjalnego dostępu do aplikacji*. Jego przełącznik znajdziesz w: Ustawienia → Aplikacje → Specjalny dostęp do aplikacji → Dostęp do wszystkich plików. **Nie pojawia się** na zwykłej stronie „Uprawnienia” aplikacji. Może ona wyświetlać informację „Nie zażądano uprawnień”, nawet gdy dostęp jest przyznany. Nie traktuj więc tego ekranu jako potwierdzenia stanu dostępu.
 
-What you can rely on:
+Co możesz sprawdzić:
 
-- **No `INTERNET` permission.** The kernel refuses outbound sockets. There is no
-  server, no telemetry endpoint, no crash reporter, no ad network. The test suite
-  asserts that opening a socket *and* resolving a hostname both actually fail.
-- **No analytics or advertising dependencies.** The whole list is in
-  `gradle/libs.versions.toml`: AndroidX, Kotlin, and PdfBox-Android.
-- **`allowBackup=false`** plus explicit backup exclusion rules, so documents
-  cannot leave via cloud backup or device transfer either.
-- **A test that fails the build** if any permission other than the one above
-  appears in the merged manifest — see
-  [`PrivacyContractTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/PrivacyContractTest.kt).
+- **Brak uprawnienia `INTERNET`.** Jądro systemu odrzuca wychodzące połączenia przez gniazda sieciowe. Nie ma serwera, telemetrii, raportowania awarii ani sieci reklamowej. Testy sprawdzają, że zarówno otwarcie gniazda, jak i rozwiązanie nazwy hosta rzeczywiście kończą się niepowodzeniem.
+- **Brak bibliotek analitycznych i reklamowych.** Pełna lista zależności znajduje się w `gradle/libs.versions.toml`: AndroidX, Kotlin i PdfBox-Android.
+- **`allowBackup=false`** oraz jawne reguły wykluczenia z kopii zapasowych zapobiegają przenoszeniu dokumentów przez kopię w chmurze lub transfer między urządzeniami.
+- **Test przerywający kompilację**, gdy w scalonym manifeście pojawi się inne uprawnienie niż wymienione powyżej. Zobacz [`PrivacyContractTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/PrivacyContractTest.kt).
 
-Verify the built artifact yourself:
+Możesz samodzielnie sprawdzić gotowy plik:
 
 ```bash
 apkanalyzer manifest permissions app-release.apk
 ```
 
-### What it stores
+### Co aplikacja zapisuje
 
-| What | Where | How to remove |
+| Dane | Miejsce | Sposób usunięcia |
 |---|---|---|
-| Names + URIs of up to 20 recent files | App-private storage, excluded from backup | Settings → Clear recent files, or switch off "Remember recent files" |
-| Working copies of the file being edited | App cache | Settings → Delete temporary working files; also cleared on every launch |
-| Three display preferences | App-private storage | Uninstall |
+| Nazwy i URI maksymalnie 20 ostatnich plików | Prywatna pamięć aplikacji, wyłączona z kopii zapasowej | Ustawienia → Wyczyść ostatnie pliki lub wyłączenie opcji „Zapamiętuj ostatnie pliki” |
+| Robocze kopie edytowanego pliku | Pamięć podręczna aplikacji | Ustawienia → Usuń tymczasowe pliki robocze; są też czyszczone przy każdym uruchomieniu |
+| Trzy ustawienia wyświetlania | Prywatna pamięć aplikacji | Odinstalowanie aplikacji |
 
-That is the complete list. No identifier of any kind, no first-run ID, no
-advertising ID.
+To pełna lista. Nie ma identyfikatorów użytkownika, pierwszego uruchomienia ani reklamowych.
 
-## Features
+## Funkcje
 
-**Reading**
-- Continuous vertical scroll, rendered by Android's own `PdfRenderer`
-- Pinch to zoom, with pages redrawn sharply at each zoom level
-- Jump to page, text search, night mode
-- Opens password-protected PDFs
-- Registers as a PDF handler, so other apps can open documents in it
+**Czytanie**
 
-**Finding files**
-- Built-in browser: every PDF on the device, newest first, searchable by name
-- Or browse by folder
-- Or the system picker, if you would rather not grant file access
+- Ciągłe przewijanie pionowe, renderowanie przez systemowy `PdfRenderer` Androida.
+- Powiększanie gestem szczypania i ponowne renderowanie stron z zachowaniem ostrości na każdym poziomie powiększenia.
+- Przechodzenie do strony, wyszukiwanie tekstu i tryb nocny.
+- Otwieranie plików PDF zabezpieczonych hasłem.
+- Obsługa otwierania plików PDF z innych aplikacji.
 
-**Editing** (all in one pass, with live preview)
-- Rotate, crop with draggable handles, delete, restore
-- Resize: scale by percentage, or refit onto A3, A4, A5, Letter, Legal or Tabloid
-- Reorder page by page, or reverse the whole document
-- Merge other PDFs in at any position, then edit their pages like any other
-- Add text; remove content with a white-out block (the page is flattened, so it is really gone); highlight; draw freehand
-- Text watermark: diagonal, centred, tiled, top or bottom
-- Page numbers with a format template, position, start number, and cover-skipping
-- Applied per page, to a selection, or to everything
+**Wyszukiwanie plików**
 
-**Whole-file jobs**
-- Merge several PDFs into one
-- Split into multiple files by page range, or every N pages
-- Extract chosen pages into a new document
-- Compress — two modes: re-encode images only (text stays selectable), or
-  flatten pages to images for the smallest file. The UI says which trade-off you
-  are making.
-- PDF → JPG or PNG at a chosen resolution
-- Images → PDF, honouring EXIF rotation, with A4 / Letter / fit-image sizing
-- Extract text to a `.txt` file
-- Protect with AES-256 password, or remove a password you know
-- Sign: draw your signature and place it on a page
+- Wbudowana przeglądarka wszystkich plików PDF na urządzeniu, od najnowszych, z wyszukiwaniem według nazwy.
+- Przeglądanie według folderów.
+- Systemowe okno wyboru, jeśli nie chcesz przyznawać dostępu do plików.
 
-## Deliberately not included
+**Edycja** — wiele zmian podczas jednej sesji, z podglądem na żywo
 
-Being honest about the edges rather than shipping something that half-works:
+- Obracanie, przycinanie za pomocą przeciąganych uchwytów, usuwanie i przywracanie.
+- Zmiana rozmiaru: skalowanie procentowe lub dopasowanie do A3, A4, A5, Letter, Legal i Tabloid.
+- Zmiana kolejności pojedynczych stron lub odwracanie kolejności całego dokumentu.
+- Wstawianie innych plików PDF w dowolnym miejscu i dalsza edycja ich stron.
+- Dodawanie tekstu, usuwanie treści przez zakrywanie ze spłaszczeniem strony, podświetlanie i rysowanie odręczne.
+- Tekstowy znak wodny: ukośnie, na środku, kafelkowo, u góry lub u dołu.
+- Numeracja stron z szablonem formatu, pozycją, numerem początkowym i pomijaniem stron początkowych, np. okładki.
+- Stosowanie zmian do pojedynczej strony, zaznaczenia lub całego dokumentu.
 
-- **Word / Excel / PowerPoint conversion.** Doing it properly needs a full
-  office-document engine. A bad converter is worse than no converter.
-- **OCR.** Reading text out of scanned images needs a model, which means either a
-  large bundled download or a server. Scanned pages are detected and the app
-  says they contain no extractable text rather than silently returning nothing.
-- **Cloud sync, accounts, sharing links.** The entire point is that nothing leaves.
-- **Cryptographic digital signatures.** "Sign PDF" places an image of your
-  signature on the page. It is ink on paper, not a certificate, and the app says
-  so on screen.
+**Operacje na całych plikach**
 
-## Requirements
+- Łączenie kilku plików PDF w jeden.
+- Dzielenie według zakresów lub co N stron.
+- Wyodrębnianie wybranych stron do nowego dokumentu.
+- Kompresja w dwóch trybach: ponowne kodowanie samych obrazów z zachowaniem możliwości zaznaczania tekstu albo spłaszczenie stron do obrazów w celu uzyskania najmniejszego pliku. Interfejs wyjaśnia konsekwencje wyboru.
+- PDF → JPG lub PNG w wybranej rozdzielczości.
+- Obrazy → PDF z uwzględnieniem obrotu EXIF i formatem A4, Letter lub dopasowaniem do obrazu.
+- Wyodrębnianie tekstu do pliku `.txt`.
+- Ochrona hasłem z szyfrowaniem AES-256 lub usuwanie znanego hasła.
+- Podpisywanie: narysowanie podpisu i umieszczenie go na stronie.
 
-- Android 12 (API 31) or newer
-- About 15 MB installed
+## Funkcje celowo pominięte
 
-## Building
+Projekt jasno określa ograniczenia zamiast udostępniać niepełne rozwiązania:
+
+- **Konwersja Word / Excel / PowerPoint.** Poprawna obsługa wymaga pełnego silnika dokumentów biurowych. Niedokładny konwerter byłby gorszy niż jego brak.
+- **OCR.** Odczyt tekstu ze skanów wymaga modelu, a więc dużego pakietu danych do pobrania lub serwera. Aplikacja wykrywa skany i informuje o braku tekstu do wyodrębnienia, zamiast bez wyjaśnienia zwracać pusty wynik.
+- **Synchronizacja w chmurze, konta i linki do udostępniania.** Założeniem jest pozostawienie danych na urządzeniu.
+- **Kryptograficzne podpisy cyfrowe.** Funkcja „Podpisz PDF” umieszcza na stronie obraz podpisu. Odpowiada podpisowi na papierze, a nie certyfikatowi. Aplikacja informuje o tym na ekranie.
+
+## Wymagania
+
+- Android 12 (API 31) lub nowszy.
+- Około 15 MB po instalacji.
+
+## Kompilacja
 
 ```bash
 git clone https://github.com/FanFeast/anonpdf.git
@@ -186,92 +140,60 @@ cd anonpdf
 ./gradlew assembleDebug
 ```
 
-You need JDK 17+ and an Android SDK with platform 37 and build-tools 36. Point
-Gradle at your SDK with `local.properties`:
+Potrzebne są JDK 17 lub nowsze oraz Android SDK z platformą 37 i narzędziami build-tools 36. Wskaż Gradle lokalizację SDK w pliku `local.properties`:
 
 ```properties
 sdk.dir=/path/to/Android/Sdk
 ```
 
-### Tests
+### Testy
 
 ```bash
-./gradlew testDebugUnitTest          # 55 JVM tests: page ranges, edit-plan folding, render cap, UI logic
-./gradlew connectedDebugAndroidTest  # device tests; needs a device or emulator
-./gradlew :desktop-engine:test       # the engine on desktop: 108 tests, no device needed
-./gradlew :desktop:test              # the desktop app, driven end to end
-./gradlew :desktop:run               # run the desktop app
+./gradlew testDebugUnitTest          # 55 testów JVM: zakresy stron, przetwarzanie planu edycji, limit renderowania, logika interfejsu
+./gradlew connectedDebugAndroidTest  # testy na urządzeniu; wymagają urządzenia lub emulatora
+./gradlew :desktop-engine:test       # silnik na komputerze: 108 testów, bez urządzenia mobilnego
+./gradlew :desktop:test              # testy całej aplikacji komputerowej
+./gradlew :desktop:run               # uruchomienie aplikacji komputerowej
 ```
 
-The engine's tests that need a renderer (every operation, and the editor's
-preview-matches-export checks) live in `shared-engine/src/deviceTest` and run in
-both the Android and the desktop suite. CI runs the desktop engine tests on Linux and
-Windows.
+Testy silnika wymagające renderowania — obejmujące wszystkie operacje i porównanie podglądu z eksportem — znajdują się w `shared-engine/src/deviceTest`. Są uruchamiane zarówno w zestawie testów Androida, jak i wersji komputerowej. CI uruchamia testy silnika komputerowego na Linuksie i Windowsie.
 
-The instrumented suite is where the real coverage lives. It builds PDFs, runs
-every operation against them, and asserts on the results: page counts and order
-after reorganising, crop boxes, scaling geometry, encryption round-trips,
-compression ratios, page numbers reflecting the final order, rendered pixels for
-the watermark, and that a preview matches its export exactly. Two of them exist
-because a weaker version passed while the code was wrong: scaling is checked by
-re-rendering and comparing the whole layout, not just the page dimensions, and
-cropping is checked on a rotated page. It also asserts the privacy contract,
-including that a socket connection and a DNS lookup both fail.
+Najszerszy zakres weryfikacji zapewniają testy na urządzeniu. Tworzą pliki PDF, wykonują każdą operację i sprawdzają wyniki: liczbę i kolejność stron po reorganizacji, obszary przycięcia, geometrię skalowania, szyfrowanie i odszyfrowywanie, stopień kompresji, numerację zgodną z końcową kolejnością, wyrenderowane piksele znaku wodnego oraz dokładną zgodność podglądu z eksportem. Dwa testy powstały, ponieważ ich słabsze wersje przechodziły mimo błędnego kodu: skalowanie jest sprawdzane przez ponowne renderowanie i porównanie całego układu, a nie tylko wymiarów stron, zaś przycinanie jest sprawdzane na obróconej stronie. Testy weryfikują też zasady prywatności, w tym niepowodzenie połączenia przez gniazdo sieciowe i zapytania DNS.
 
-[`AppSmokeTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/ui/AppSmokeTest.kt)
-drives the real UI: it launches the app, opens every screen reachable from Home
-(including every tool in the catalogue) and comes back, and hands the app a PDF
-through both "Open with" and "Share", checking it renders in the viewer and
-opens in the editor.
-[`ManifestContractTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/ManifestContractTest.kt)
-pins the entry points other apps rely on: the launcher, "Open with" and "Share"
-for PDFs, the private share-out provider, that nothing else is exported, and
-that backup stays off. CI also builds the minified release bundle on every pull
-request and checks its permissions, so a shrinker or manifest regression shows
-up before a release is tagged.
+[`AppSmokeTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/ui/AppSmokeTest.kt) steruje rzeczywistym interfejsem. Uruchamia aplikację, odwiedza każdy ekran dostępny z ekranu głównego, w tym wszystkie narzędzia, i wraca. Przekazuje też PDF przez „Otwórz za pomocą” i „Udostępnij”, sprawdzając renderowanie w czytniku i otwieranie w edytorze.
 
-### Desktop downloads
+[`ManifestContractTest`](app/src/androidTest/java/io/github/fanfeast/anonpdf/ManifestContractTest.kt) sprawdza punkty wejścia używane przez inne aplikacje: uruchamianie, „Otwórz za pomocą” i „Udostępnij” dla PDF, prywatny komponent udostępniania plików, brak innych eksportowanych komponentów i wyłączone kopie zapasowe. CI buduje też zminimalizowany pakiet wydania przy każdym pull requeście i sprawdza uprawnienia, aby wykryć błędy minimalizacji lub manifestu przed oznaczeniem wydania.
+
+### Pakiety wersji komputerowej
 
 ```bash
-./gradlew :desktop:createReleaseDistributable            # shrunk app + trimmed Java runtime
+./gradlew :desktop:createReleaseDistributable            # zminimalizowana aplikacja i ograniczone środowisko Java
 desktop/packaging/linux/build-appimage.sh 1.0.0 dist     # -> dist/AnonPDF-1.0.0-linux-x86_64.tar.gz
-pwsh desktop/packaging/windows/build-zip.ps1 -Version 1.0.0 -Out dist   # on Windows
+pwsh desktop/packaging/windows/build-zip.ps1 -Version 1.0.0 -Out dist   # w Windowsie
 desktop/build/compose/binaries/main-release/app/AnonPDF/bin/AnonPDF --self-test
 ```
 
-Both downloads are portable: nothing is installed. Linux gets an AppImage inside
-a `.tar.gz`, because tar keeps the executable bit that browsers strip, so it is
-extract and double-click. The AppImage uses the static runtime, so it needs no
-`libfuse2`, and its build tools are pinned by checksum. `--self-test` runs the
-engine's riskiest paths inside the packaged app; CI runs it on every pull
-request, on Linux and Windows, against the exact files it builds.
+Oba pakiety są przenośne i nie wymagają instalacji. Pakiet dla Linuksa zawiera AppImage w archiwum `.tar.gz`, ponieważ tar zachowuje uprawnienie do uruchamiania, które przeglądarki usuwają. Wystarczy rozpakować archiwum i dwukrotnie kliknąć plik. AppImage korzysta ze statycznego środowiska uruchomieniowego, więc nie wymaga `libfuse2`, a narzędzia do jego budowania mają przypięte sumy kontrolne. Opcja `--self-test` sprawdza najbardziej podatne na błędy ścieżki silnika w spakowanej aplikacji. CI uruchamia ją przy każdym pull requeście na Linuksie i Windowsie, używając dokładnie tych plików, które zostały zbudowane.
 
 ### Flatpak
 
-`flatpak/` holds the Flathub manifest. Flathub builds with no network, so every
-Maven file the build needs is listed in `flatpak/maven-sources.json` with its
-SHA-256, and `offline.init.gradle.kts` makes those the only place Gradle looks.
-The sandbox gives the app no network either: the manifest grants no
-`--share=network`, and only the Documents, Downloads, Desktop and Pictures
-folders. A file opened from the file manager or dragged onto the window comes in
-through the document portal from anywhere.
+Katalog `flatpak/` zawiera manifest Flathub. Flathub buduje aplikacje bez dostępu do sieci, dlatego każdy wymagany plik Maven jest wymieniony w `flatpak/maven-sources.json` wraz z sumą SHA-256. Plik `offline.init.gradle.kts` ogranicza wyszukiwanie zależności przez Gradle do tego źródła. Aplikacja również nie otrzymuje dostępu do sieci w piaskownicy: manifest nie przyznaje `--share=network`. Dostęp do plików ogranicza się do folderów Dokumenty, Pobrane, Pulpit i Obrazy. Plik otwierany z menedżera plików lub przeciągnięty do okna może pochodzić z dowolnego miejsca — jest przekazywany przez portal dokumentów.
 
 ```bash
-# After any dependency change; CI fails until the list matches the build.
+# Po każdej zmianie zależności; CI zgłasza błąd, dopóki lista nie odpowiada kompilacji.
 G=$(mktemp -d)
 GRADLE_USER_HOME=$G ./gradlew --no-daemon -Panonpdf.desktopOnly=true :desktop:createReleaseDistributable
 flatpak/generate-sources.py $G > flatpak/maven-sources.json
 
-# Build and install locally (point the manifest's git source at your checkout).
+# Lokalna kompilacja i instalacja — skieruj źródło git w manifeście na swoją kopię repozytorium.
 flatpak run org.flatpak.Builder --user --install --force-clean builddir flatpak/io.github.fanfeast.anonpdf.yml
 ```
 
-The build runs `--self-test` inside the sandbox, so a broken Flatpak fails to
-build rather than failing for a user.
+Podczas kompilacji `--self-test` działa wewnątrz piaskownicy. Dzięki temu błędny Flatpak nie przejdzie kompilacji, zamiast ujawnić problem dopiero u użytkownika.
 
-### Release builds
+### Kompilacje wydania
 
-Signing is opt-in. Create `keystore.properties` in the project root (gitignored):
+Podpisywanie jest opcjonalne. Utwórz plik `keystore.properties` w katalogu głównym projektu. Jest wykluczony z kontroli wersji przez `.gitignore`:
 
 ```properties
 storeFile=/absolute/path/to/upload.jks
@@ -280,102 +202,68 @@ keyAlias=…
 keyPassword=…
 ```
 
-Then:
+Następnie wykonaj:
 
 ```bash
-./gradlew bundleRelease   # .aab for Play
-./gradlew assembleRelease # .apk for direct install
+./gradlew bundleRelease   # .aab do Google Play
+./gradlew assembleRelease # .apk do bezpośredniej instalacji
 ```
 
-Without that file the release build still works, it just produces an unsigned
-artifact.
+Bez tego pliku kompilacja wydania nadal działa, ale tworzy niepodpisany pakiet.
 
-## How it is put together
+## Budowa projektu
 
-Kotlin, Jetpack Compose, no dependency-injection framework and no architecture
-ceremony beyond what the size justifies. The PDF engine and the editor screens
-and tool screens are shared with a desktop app for Linux and Windows, which is
-built and tested on every change but not released yet.
+Kotlin i Jetpack Compose, bez frameworka wstrzykiwania zależności oraz bez nadmiernie rozbudowanej architektury. Silnik PDF, ekrany edytora i narzędzi są współdzielone z aplikacją na Linuksa i Windowsa. Jest ona budowana i testowana przy każdej zmianie, ale nie została jeszcze wydana.
 
 ```
-shared-engine/src/     The engine, shared by Android and desktop. File in, file out.
+shared-engine/src/     Silnik współdzielony przez Androida i komputery: plik wejściowy → wynik.
 ├── main/.../pdf/
-│   ├── PdfEditor.kt     Edit ops → normalised plan → apply / preview
-│   ├── PdfOps.kt        Merge, split, extract, crop, security, text
-│   ├── PdfConvert.kt    Compression, page export, images → PDF
-│   ├── PdfDraw.kt       Single-page drawing shared by editor and tools
-│   └── PageRanges.kt    Parses "1-3, 5, 9-12"
-├── test/              JVM tests, run on both platforms
-└── deviceTest/        Engine tests that need a renderer: on a device for
-                       Android, as plain tests on desktop
+│   ├── PdfEditor.kt     Operacje edycji → ujednolicony plan → zastosowanie / podgląd
+│   ├── PdfOps.kt        Łączenie, dzielenie, wyodrębnianie, przycinanie, ochrona, tekst
+│   ├── PdfConvert.kt    Kompresja, eksport stron, obrazy → PDF
+│   ├── PdfDraw.kt       Rysowanie pojedynczej strony, wspólne dla edytora i narzędzi
+│   └── PageRanges.kt    Odczyt zakresów „1-3, 5, 9-12”
+├── test/              Testy JVM uruchamiane na obu platformach
+└── deviceTest/        Testy silnika wymagające renderowania: na urządzeniu z Androidem
+                       lub jako zwykłe testy na komputerze
 
 app/src/main/java/io/github/fanfeast/anonpdf/
-├── pdf/          Android's half of the engine
-│   ├── Platform.kt      What the engine's image and size types are here
-│   ├── PdfRasterizer.kt Wraps android.graphics.pdf.PdfRenderer
-│   └── DocumentStore.kt Moves bytes between SAF and the private cache
-├── ui/common/Platform.kt  What the shared screens' file types and pickers are here
-├── storage/      Optional all-files access and the PDF scanner
-├── data/         Recent files and preferences (DataStore)
-└── ui/           Android-only screens: home, viewer, browser, settings, about
+├── pdf/          Część silnika przeznaczona dla Androida
+│   ├── Platform.kt      Typy obrazów i rozmiarów używane przez silnik na tej platformie
+│   ├── PdfRasterizer.kt Obsługa android.graphics.pdf.PdfRenderer
+│   └── DocumentStore.kt Przenoszenie danych między SAF a prywatną pamięcią podręczną
+├── ui/common/Platform.kt  Typy plików i okna wyboru dla współdzielonych ekranów
+├── storage/      Opcjonalny dostęp do wszystkich plików i skaner PDF
+├── data/         Ostatnie pliki i ustawienia (DataStore)
+└── ui/           Ekrany tylko dla Androida: główny, czytnik, przeglądarka, ustawienia, informacje
 
-shared-ui/src/main/.../ui/   Screens shared with the desktop app: the editor,
-                             the tools and Sign, theme, common components
+shared-ui/src/main/.../ui/   Ekrany wspólne z wersją komputerową: edytor,
+                             narzędzia i podpisywanie, motyw oraz wspólne komponenty
 
-desktop-engine/   The engine compiled for Windows and Linux (see below)
-desktop/          The desktop app: a native window, no browser, with the
-                  editor and every tool behind a sidebar; files can be
-                  dragged onto it from the file manager
+desktop-engine/   Silnik kompilowany dla Windowsa i Linuksa — opis poniżej
+desktop/          Aplikacja komputerowa: natywne okno, bez przeglądarki,
+                  z edytorem i wszystkimi narzędziami w panelu bocznym;
+                  pliki można przeciągać z menedżera plików
 ```
 
-Four decisions worth explaining:
+Decyzje projektowe wymagające wyjaśnienia:
 
-**Rendering uses the platform.** `android.graphics.pdf.PdfRenderer` is already on
-every device, sandboxed by the OS, and costs nothing in APK size. PdfBox-Android
-handles document *structure* — it is not used for rasterising.
+**Renderowanie korzysta z platformy.** `android.graphics.pdf.PdfRenderer` jest dostępny na każdym obsługiwanym urządzeniu, działa w piaskownicy systemowej i nie zwiększa rozmiaru APK. PdfBox-Android obsługuje *strukturę* dokumentu, a nie jego rasteryzację.
 
-**Edits are a list of operations, not mutations.** The editor keeps an ordered op
-list and derives a normalised `EditPlan` from it. Undo is dropping the last op
-and recomputing. Preview and export both consume that same plan, which is why
-they cannot drift apart.
+**Edycja jest listą operacji, a nie bezpośrednich modyfikacji.** Edytor przechowuje uporządkowaną listę operacji i wyprowadza z niej ujednolicony `EditPlan`. Cofnięcie zmiany usuwa ostatnią operację i przelicza plan. Podgląd i eksport korzystają z tego samego planu, dzięki czemu pozostają zgodne.
 
-**Preview builds a one-page document.** Rather than applying the plan to the whole
-file, preview extracts the page being shown, applies the plan's page-scoped and
-document-scoped operations, and renders that. A 400-page file previews as fast as
-a 4-page one.
+**Podgląd tworzy jednostronicowy dokument.** Zamiast stosować plan do całego pliku, mechanizm podglądu wyodrębnia widoczną stronę, stosuje odpowiednie operacje dotyczące strony i całego dokumentu, a następnie ją renderuje. Podgląd pliku 400-stronicowego jest równie szybki jak pliku czterostronicowego.
 
-**One engine source, two PDFBox builds.** Android uses PdfBox-Android, a port of
-PDFBox with the same API under another package name (`com.tom_roush.pdfbox`).
-The engine is written once against it, and `desktop-engine` compiles a copy
-generated at build time with the upstream package name (`org.apache.pdfbox`) put
-back. What genuinely differs per platform — the image type, and how a page is
-rasterised (Android's built-in renderer; PDFBox's own on desktop) — is a small
-file on each side. The same editor tests run against both.
+**Jeden kod silnika, dwie wersje PDFBox.** Android korzysta z PdfBox-Android, czyli portu PDFBox z tym samym API, lecz inną nazwą pakietu (`com.tom_roush.pdfbox`). Silnik jest napisany raz dla tego API. Moduł `desktop-engine` kompiluje kopię generowaną podczas budowania z przywróconą nazwą oryginalnego pakietu (`org.apache.pdfbox`). Różnice platformowe — typ obrazu i sposób rasteryzacji strony, przez systemowy renderer Androida lub PDFBox na komputerze — mieszczą się w niewielkim pliku dla każdej platformy. Te same testy edytora sprawdzają obie wersje.
 
-The editor screens are shared the same way, without the rename: Compose
-Multiplatform uses Jetpack Compose's own `androidx.compose` packages. Each side
-has a small `Platform.kt` saying what a document reference is (a content URI on
-Android, a file on desktop), how the user picks one, and how a photo is read
-upright, plus its own result card for saving. On a wide screen the editor puts
-its controls in a panel beside the page instead of a drawer under it. Files
-dropped onto the desktop window reach the shared screens through `DropInbox`,
-which does nothing on Android, so each screen decides for itself what a dropped
-file means.
+Ekrany edytora są współdzielone podobnie, ale bez zmiany nazw pakietów: Compose Multiplatform korzysta z pakietów `androidx.compose` Jetpack Compose. Każda platforma ma niewielki plik `Platform.kt`, który określa referencję dokumentu — URI zawartości na Androidzie lub plik na komputerze — sposób wyboru dokumentu i poprawnego odczytu orientacji zdjęcia. Każda ma też własny panel zapisywania wyników. Na szerokim ekranie edytor wyświetla narzędzia obok strony zamiast w wysuwanym panelu pod nią. Pliki przeciągnięte do okna komputerowego trafiają do wspólnych ekranów przez `DropInbox`. Na Androidzie ten mechanizm jest nieaktywny, a każdy ekran sam interpretuje otrzymany plik.
 
-**Page edits happen in place.** Reordering or deleting pins each page's inherited
-attributes, detaches every page from the page tree, then re-attaches them in the
-new order. The obvious alternative — copying pages into a fresh document —
-silently drops annotations and page-tree-inherited resources.
+**Operacje na stronach zachowują istniejący dokument.** Przed zmianą kolejności lub usunięciem stron silnik utrwala ich dziedziczone atrybuty, odłącza wszystkie strony od drzewa, a następnie dołącza je w nowej kolejności. Pozornie prostsze kopiowanie stron do nowego dokumentu powodowałoby utratę adnotacji i zasobów dziedziczonych z drzewa stron.
 
-BouncyCastle, which ships with PdfBox, is excluded from the build. PdfBox only
-reaches it for certificate-based encryption, which this app does not offer;
-password protection uses the platform's own JCE. Dropping it removed about 4 MB
-of unused code, most of it post-quantum algorithms, and the encryption tests
-prove the remaining paths still work.
+Biblioteka BouncyCastle, dostarczana z PdfBox, została wykluczona z kompilacji. PdfBox używa jej tylko do szyfrowania opartego na certyfikatach, którego aplikacja nie udostępnia. Ochrona hasłem korzysta z systemowego JCE. Usunięcie biblioteki zmniejszyło ilość nieużywanego kodu o około 4 MB, głównie algorytmów postkwantowych. Testy szyfrowania potwierdzają działanie pozostałych mechanizmów.
 
-## Licence
+## Licencja
 
-MIT. See [LICENSE](LICENSE).
+MIT. Zobacz [LICENSE](LICENSE).
 
-Third-party components and their licences are listed in the app under
-**About → Open source licences**.
+Zewnętrzne komponenty i ich licencje są wymienione w aplikacji w sekcji **O aplikacji → Licencje otwartego oprogramowania**.
