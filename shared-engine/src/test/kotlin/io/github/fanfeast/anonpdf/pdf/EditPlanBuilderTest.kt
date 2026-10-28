@@ -98,11 +98,11 @@ class EditPlanBuilderTest {
     @Test
     fun `resize descriptions name the sheet and the fit`() {
         assertEquals(
-            "Resize to Letter (fit) · page 1",
+            "Rozmiar Letter (dopasowanie) · strony: 1",
             ResizePages(ResizeTarget(PaperSize.LETTER), setOf(0)).describe(),
         )
         assertEquals(
-            "Resize to A4 landscape (fill) · pages 1-2",
+            "Rozmiar A4 poziomo (wypełnienie) · strony: 1-2",
             ResizePages(
                 ResizeTarget(PaperSize.A4, PageOrientation.LANDSCAPE, fill = true),
                 setOf(0, 1),
@@ -336,7 +336,7 @@ class EditPlanBuilderTest {
         assertEquals("Obrót 90° · strony: 1-2", RotatePages(90, setOf(0, 1)).describe())
         assertEquals("Usunięcie · strony: 3", DeletePages(setOf(2)).describe())
         assertEquals(
-            "Crop 6% · page 1",
+            "Przycięcie 6% · strony: 1",
             CropPages(CropInsets(0.06f, 0.06f, 0.06f, 0.06f), setOf(0)).describe(),
         )
         assertEquals("Skalowanie 75% · strony: 1", ScalePages(0.75f, setOf(0)).describe())

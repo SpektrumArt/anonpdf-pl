@@ -8,16 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * The privacy promise, asserted against the installed package rather than the
- * source.
- *
- * AnonPDF reads files from storage, so it is not a zero-permission app. What it
- * still guarantees is that nothing it reads can leave the device: there is no
- * network permission, and the OS enforces that rather than the app promising it.
- * The allowlist below is the whole set of permissions this app is allowed to
- * hold — anything else appearing in the merged manifest fails the build.
- */
+/** Reviewed permissions for the HTTPS-import variant; backups remain disabled. */
 @RunWith(AndroidJUnit4::class)
 class PrivacyContractTest {
 
@@ -30,6 +21,7 @@ class PrivacyContractTest {
      * against itself; it grants access to nothing and no other app can hold it.
      */
     private val allowed = setOf(
+        android.Manifest.permission.INTERNET,
         // The one permission this app asks for, and only so the built-in browser
         // can list PDFs. Optional: declining it falls back to the system picker.
         "android.permission.MANAGE_EXTERNAL_STORAGE",
@@ -38,7 +30,7 @@ class PrivacyContractTest {
 
     /** Anything that could carry a document off the device. */
     private val forbidden = setOf(
-        android.Manifest.permission.INTERNET,
+
         android.Manifest.permission.ACCESS_NETWORK_STATE,
         android.Manifest.permission.ACCESS_WIFI_STATE,
         android.Manifest.permission.CHANGE_NETWORK_STATE,
@@ -74,42 +66,13 @@ class PrivacyContractTest {
     }
 
     @Test
-    fun nothingThatCouldExfiltrateADocumentIsDeclared() {
+    fun noUnrelatedSensitivePermissionsAreDeclared() {
         val declared = declaredPermissions()
         val offenders = forbidden.filter { it in declared }
         assertEquals(
             "These must never be declared: $offenders",
             emptyList<String>(),
             offenders,
-        )
-    }
-
-    @Test
-    fun theOsRefusesOutboundConnections() {
-        // Without INTERNET the kernel denies the socket. This is the guarantee the
-        // whole app rests on: it holds even if some dependency tried to phone home.
-        val failure = runCatching {
-            java.net.Socket().use { socket ->
-                socket.connect(java.net.InetSocketAddress("example.com", 80), 3000)
-            }
-        }.exceptionOrNull()
-
-        assertTrue(
-            "a socket connection must fail, instead it: ${failure ?: "succeeded"}",
-            failure != null,
-        )
-    }
-
-    @Test
-    fun dnsResolutionAlsoFails() {
-        // Belt and braces: no name lookups either, so nothing can be leaked as a
-        // hostname to a DNS server.
-        val failure = runCatching {
-            java.net.InetAddress.getByName("example.com")
-        }.exceptionOrNull()
-        assertTrue(
-            "DNS must not resolve, instead it: ${failure ?: "succeeded"}",
-            failure != null,
         )
     }
 

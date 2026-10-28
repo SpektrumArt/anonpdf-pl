@@ -151,8 +151,8 @@ fun BrowseScreen(
                         "Aby wyświetlić pliki PDF na urządzeniu, AnonPDF potrzebuje uprawnienia " +
                             "„Dostęp do wszystkich plików”. Włącza się je w ustawieniach, zamiast " +
                             "w zwykłym oknie uprawnień.\n\nPozwala aplikacji odczytywać " +
-                            "pliki. Nadal nie ma ona uprawnienia do internetu, więc dokumenty " +
-                            "pozostają na urządzeniu.",
+                            "pliki. Dostęp do internetu służy do pobierania wskazanych PDF; dokumenty " +
+                            "są edytowane na urządzeniu.",
                     )
                     Spacer(Modifier.height(16.dp))
                     Button(

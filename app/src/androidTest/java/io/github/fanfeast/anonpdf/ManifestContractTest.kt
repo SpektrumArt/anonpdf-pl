@@ -73,6 +73,13 @@ class ManifestContractTest {
     }
 
     @Test
+    fun browserLinkShareIsHandled() {
+        assertTrue(resolvesToMain(Intent(Intent.ACTION_SEND).setType("text/plain")
+            .putExtra(Intent.EXTRA_TEXT, "https://example.com/download?signature=abc")))
+        assertTrue(resolvesToMain(Intent(Intent.ACTION_SEND).setType("text/uri-list")))
+    }
+
+    @Test
     fun onlyMainActivityIsExported() {
         val info = pm.getPackageInfo(
             context.packageName,
